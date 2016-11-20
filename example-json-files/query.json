@@ -2,11 +2,15 @@
   "places" : [
     {"id" : "$id",
       "name" : "$name",
-      "mainCategory" : "$category"
+      "mainCategory" : "$category",
+      "long" : "$long",
+      "lat" : "$lat"
     },
     {"id" : "$id",
       "name" : "$name",
-      "mainCategory" : "$category"
+      "mainCategory" : "$category",
+      "long" : "$long",
+      "lat" : "$lat"
     },
     ...
   ]
