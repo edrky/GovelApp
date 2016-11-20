@@ -49,3 +49,6 @@ captures/
 /build
 /captures
 .externalNativeBuild
+
+#Google Maps Api
+google_maps_api.xml
