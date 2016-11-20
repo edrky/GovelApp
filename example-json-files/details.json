@@ -1,0 +1,14 @@
+{"id" : "$id",
+  "name" : "$name",
+  "address" : "$address",
+  "desc" : "$desc",
+  "contact" : "$contact",
+  "products" : "$product",
+  "categories" : "$categories$",
+  "services" : "$services",
+  "times" : "$time",
+  "image" : {
+    "type" : "${jpg,png...}",
+    "url" : "$url"
+  }
+}

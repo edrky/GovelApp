@@ -1,0 +1,13 @@
+{"query" : "$query",
+  "places" : [
+    {"id" : "$id",
+      "name" : "$name",
+      "mainCategory" : "$category"
+    },
+    {"id" : "$id",
+      "name" : "$name",
+      "mainCategory" : "$category"
+    },
+    ...
+  ]
+}
