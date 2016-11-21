@@ -3,22 +3,22 @@ package com.govelapp.govelapp.shopclasses;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.govelapp.govelapp.R;
 
 public class Shop {
     final static String TAG = "Shop";
 
-    //should this be public or private? decide and implement
     private enum category{
-        CAFE,RESTAURANT,SHOP,MARKET
+        CAFE,RESTAURANT,SHOP,MARKET,DEFAULT
     }
 
     private int id;
     private String name;
     private category mainCategory;
     private LatLng position;
-    private MarkerOptions marker;
+    private MarkerOptions markerOptions;
     private BitmapDescriptor icon;
 
     public int getId() {
@@ -41,8 +41,8 @@ public class Shop {
         return mainCategory;
     }
 
-    public void setMainCategory(category mainCategory) {
-        this.mainCategory = mainCategory;
+    public void setMainCategory(String mainCategory) {
+        this.mainCategory = interpretCategory(mainCategory);
     }
 
     public LatLng getPosition() {
@@ -53,12 +53,18 @@ public class Shop {
         this.position = position;
     }
 
-    public MarkerOptions getMarker() {
-        return marker;
+    public MarkerOptions getMarkerOptions() {
+        return markerOptions;
     }
 
-    public void setMarker(MarkerOptions marker) {
-        this.marker = marker;
+    public void setMarkerOptions(MarkerOptions markerOptions){
+        this.markerOptions = markerOptions;
+    }
+
+    public void setMarkerOptions() {
+        markerOptions = new MarkerOptions()
+                .position(position)
+                .title(name);
     }
 
     public BitmapDescriptor getIcon() {
@@ -67,5 +73,28 @@ public class Shop {
 
     public void setIcon(BitmapDescriptor icon) {
         this.icon = icon;
+    }
+
+    public void setIcon(){
+        switch(mainCategory){
+//            case category.CAFE:
+//                icon = BitmapDescriptorFactory.fromResource(R.drawable.cafeMarker);
+//                break;
+//            case category.MARKET:
+//                icon = BitmapDescriptorFactory.fromResource(R.drawable.marketMarker);
+//                break;
+            default:
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.defaultMarker);
+        }
+    }
+
+    private category interpretCategory(String categoryString){
+        switch(categoryString) {
+            case "CAFE": return category.CAFE;
+            case "RESTAURANT": return category.RESTAURANT;
+            case "SHOP": return category.SHOP;
+            case "MARKET": return category.MARKET;
+            default: return category.DEFAULT;
+        }
     }
 }
