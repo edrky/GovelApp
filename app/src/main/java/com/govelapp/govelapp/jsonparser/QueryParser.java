@@ -38,6 +38,8 @@ Details
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.LatLng;
 import com.govelapp.govelapp.shopclasses.Shop;
 
 import org.json.JSONArray;
@@ -50,7 +52,7 @@ import java.util.List;
 public class QueryParser {
     public static final String TAG = "QueryParser";
 
-    public static List<Shop> shopParser(String restReply){
+    public static List<Shop> parseShopList(String restReply){
         List<Shop> shopList = new ArrayList<Shop>();
         try {
             JSONObject jsonRoot = new JSONObject(restReply);
@@ -58,14 +60,25 @@ public class QueryParser {
 
             for (int i=0; i<places.length(); i++){
                 JSONObject place = places.getJSONObject(i);
-                Shop shop = new Shop();
-            }
 
+                //should this be changed for a builder pattern instead of javabean pattern?
+                Shop shop = new Shop();
+
+                shop.setId(place.getInt("id"));
+                shop.setName(place.getString("name"));
+                shop.setMainCategory(place.getString("mainCategory"));
+                shop.setPosition(new LatLng(
+                        place.getDouble("latitude"),
+                        place.getDouble("longitude")
+                ));
+                shop.setMarkerOptions();
+                shop.setIcon();
+
+                shopList.add(shop);
+            }
         } catch (JSONException e) {
             Log.d(TAG, "error: can't parse json");
         }
-
-
-        return null;
+        return shopList;
     }
 }
