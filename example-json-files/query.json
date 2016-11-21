@@ -1,5 +1,4 @@
-{"query" : "$query",
-  "places" : [
+{"places" : [
     {"id" : "$id",
       "name" : "$name",
       "mainCategory" : "$category",
