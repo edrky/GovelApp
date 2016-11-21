@@ -40,6 +40,7 @@ import android.util.Log;
 
 import com.govelapp.govelapp.shopclasses.Shop;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,12 +50,16 @@ import java.util.List;
 public class QueryParser {
     public static final String TAG = "QueryParser";
 
-    public static List<Shop> shopParser(String jsonReply){
+    public static List<Shop> shopParser(String restReply){
         List<Shop> shopList = new ArrayList<Shop>();
         try {
-            JSONObject jsonRootObject = new JSONObject(jsonReply);
+            JSONObject jsonRoot = new JSONObject(restReply);
+            JSONArray places = jsonRoot.getJSONArray("places");
 
-
+            for (int i=0; i<places.length(); i++){
+                JSONObject place = places.getJSONObject(i);
+                Shop shop = new Shop();
+            }
 
         } catch (JSONException e) {
             Log.d(TAG, "error: can't parse json");
