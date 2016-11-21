@@ -78,13 +78,13 @@ public class Shop {
     public void setIcon(){
         switch(mainCategory){
 //            case category.CAFE:
-//                icon = BitmapDescriptorFactory.fromResource(R.drawable.cafeMarker);
+//                icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_cafe);
 //                break;
 //            case category.MARKET:
-//                icon = BitmapDescriptorFactory.fromResource(R.drawable.marketMarker);
+//                icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_market);
 //                break;
             default:
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.defaultMarker);
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_default);
         }
     }
 
