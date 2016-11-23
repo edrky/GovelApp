@@ -62,12 +62,9 @@ public class RestClient {
         }
     }
 
+    //Implement URL connection and get here
     public String getWebRequest(){
-
-    }
-
-    public RestClient(){
-
+        return null;
     }
 
     public String getStandardQueryJson(String url, String query){
