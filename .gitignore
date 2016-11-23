@@ -49,3 +49,7 @@ captures/
 /build
 /captures
 .externalNativeBuild
+
+#Custom
+/.idea/vcs.xml
+/.idea/misc.xml
