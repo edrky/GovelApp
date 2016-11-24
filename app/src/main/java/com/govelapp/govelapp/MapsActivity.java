@@ -1,13 +1,16 @@
 package com.govelapp.govelapp;
 
+import android.content.pm.PackageManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -38,9 +41,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //everything after this is for prototyping
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }else{
+
+        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.043437, 29.008537), 16.5f));
+        LatLng cafeNero = new LatLng(41.044400, 29.006949);
+        mMap.addMarker(new MarkerOptions().position(cafeNero).title("Cafe Nero"));
+        LatLng kukaKafe = new LatLng(41.043850, 29.006359);
+        mMap.addMarker(new MarkerOptions().position(kukaKafe).title("Kuka Kafe & Pub"));
+        LatLng sahilRest = new LatLng(41.041835, 29.009481);
+        mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));
     }
 }

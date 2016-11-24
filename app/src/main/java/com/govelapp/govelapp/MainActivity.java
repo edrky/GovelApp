@@ -25,7 +25,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
                 boolean handled = false;
                 if(i == EditorInfo.IME_ACTION_SEARCH && v.getText().length() > 0){
-                    String query = v.getText().toString();
+                    //prototype start
+                    v.setText("kahve");
+                    String query = "kahve";
+                    //prototype end
+                    //String query = v.getText().toString();
                     Intent queryIntent = new Intent(MainActivity.this, MapsActivity.class);
                     queryIntent.putExtra("query", query);
                     startActivity(queryIntent);

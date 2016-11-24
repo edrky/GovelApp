@@ -16,9 +16,6 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        buildTypes.each {
-            it.buildConfigField 'String', 'GOVEL_GMAPS_API_KEY', GovelGMapsApiKey
-        }
     }
 }
 
