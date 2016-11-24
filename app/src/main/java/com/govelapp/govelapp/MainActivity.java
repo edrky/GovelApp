@@ -3,24 +3,75 @@ package com.govelapp.govelapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.AutoCompleteTextView;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
+import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AccelerateInterpolator;
+
+
+
 
 public class MainActivity extends AppCompatActivity {
-
-    private EditText text;
+    private AutoCompleteTextView actv;
+    private EditText bar;
+    private ImageView logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        logo = (ImageView)findViewById(R.id.logoImg);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
+        bar = (EditText)findViewById(R.id.searchBar);
 
-        text = (EditText)findViewById(R.id.search_bar);
-        text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+        String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"}; //veriler
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                (this,android.R.layout.simple_list_item_1,items);
+        actv.setAdapter(adapter);
+
+        actv =(AutoCompleteTextView)findViewById(R.id.searchBar);
+
+        bar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    fadeOutAndHideImage(logo);   //arama çubuğunun yerini değiştir
+                }catch(Exception e){
+                    String a = e.toString();
+                    Toast.makeText(MainActivity.this, a, Toast.LENGTH_LONG).show();;
+                }
+
+            }
+        });
+
+
+        actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,int position, long id)
+            {
+                if(actv.getText().length() > 0){ //gerek yok sanırım
+                    String query = actv.getText().toString();
+                    Intent queryIntent = new Intent(MainActivity.this, MapsActivity.class);
+                    queryIntent.putExtra("query", query);
+                    startActivity(queryIntent);
+                }
+
+             Toast.makeText(MainActivity.this, actv.getText(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+        /*text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
                 boolean handled = false;
@@ -38,6 +89,27 @@ public class MainActivity extends AppCompatActivity {
                 return handled;
             }
         });
+*/
+
+    }
+
+    private void fadeOutAndHideImage(final ImageView logo)
+    {
+        Animation fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new AccelerateInterpolator());
+        fadeOut.setDuration(1000);
+
+        fadeOut.setAnimationListener(new AnimationListener()
+        {
+            public void onAnimationEnd(Animation animation)
+            {
+                logo.setVisibility(View.GONE);
+            }
+            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationStart(Animation animation) {}
+        });
+
+        logo.startAnimation(fadeOut);
     }
 }
 
