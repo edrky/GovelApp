@@ -3,6 +3,7 @@ package com.govelapp.govelapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
@@ -20,15 +21,19 @@ import android.view.animation.AccelerateInterpolator;
 
 
 public class MainActivity extends AppCompatActivity {
+    public static final String tag = "MainActivity";
+    
     private AutoCompleteTextView actv;
     private EditText bar;
     private ImageView logo;
+    boolean isHidden = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        logo = (ImageView)findViewById(R.id.logoImg);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        logo = (ImageView)findViewById(R.id.logoImg);
         actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
         bar = (EditText)findViewById(R.id.searchBar);
 
@@ -43,13 +48,10 @@ public class MainActivity extends AppCompatActivity {
         bar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                try{
-                    fadeOutAndHideImage(logo);   //arama çubuğunun yerini değiştir
-                }catch(Exception e){
-                    String a = e.toString();
-                    Toast.makeText(MainActivity.this, a, Toast.LENGTH_LONG).show();;
-                }
-
+                    if(!isHidden) {
+                        fadeOutAndHideImage(logo);   //make search bar fade out
+                        isHidden = true;
+                    }
             }
         });
 
@@ -58,38 +60,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,int position, long id)
             {
-                if(actv.getText().length() > 0){ //gerek yok sanırım
-                    String query = actv.getText().toString();
-                    Intent queryIntent = new Intent(MainActivity.this, MapsActivity.class);
+                Intent queryIntent = new Intent(MainActivity.this, MapsActivity.class);
+                String query = actv.getText().toString();
+                Log.d(tag, query);
+                bar.setText(query);
+                bar.setSelection(query.length()); //set the cursor position
                     queryIntent.putExtra("query", query);
                     startActivity(queryIntent);
-                }
 
-             Toast.makeText(MainActivity.this, actv.getText(), Toast.LENGTH_LONG).show();
+            // Toast.makeText(MainActivity.this, query, Toast.LENGTH_LONG).show();
             }
         });
 
 
-
-        /*text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
-                boolean handled = false;
-                if(i == EditorInfo.IME_ACTION_SEARCH && v.getText().length() > 0){
-                    //prototype start
-                    v.setText("kahve");
-                    String query = "kahve";
-                    //prototype end
-                    //String query = v.getText().toString();
-                    Intent queryIntent = new Intent(MainActivity.this, MapsActivity.class);
-                    queryIntent.putExtra("query", query);
-                    startActivity(queryIntent);
-                    handled = true;
-                }
-                return handled;
-            }
-        });
-*/
 
     }
 
@@ -97,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
     {
         Animation fadeOut = new AlphaAnimation(1, 0);
         fadeOut.setInterpolator(new AccelerateInterpolator());
-        fadeOut.setDuration(1000);
+        //fadeOut.setStartOffset(100); // Start fading out after 100 milli seconds
+        fadeOut.setDuration(800);
 
         fadeOut.setAnimationListener(new AnimationListener()
         {
