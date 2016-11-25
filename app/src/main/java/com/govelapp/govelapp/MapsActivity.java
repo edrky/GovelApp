@@ -46,7 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         }else{
-
+            //prompt user for permission
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.043437, 29.008537), 16.5f));
         LatLng cafeNero = new LatLng(41.044400, 29.006949);
