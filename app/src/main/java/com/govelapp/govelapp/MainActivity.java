@@ -22,7 +22,7 @@ import android.view.animation.AccelerateInterpolator;
 
 public class MainActivity extends AppCompatActivity {
     public static final String tag = "MainActivity";
-    
+
     private AutoCompleteTextView actv;
     private EditText bar;
     private ImageView logo;
@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
         bar = (EditText)findViewById(R.id.searchBar);
 
-
-        String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"}; //veriler
+        //will get from our database per week
+        String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this,android.R.layout.simple_list_item_1,items);
         actv.setAdapter(adapter);
