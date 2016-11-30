@@ -21,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AccelerateInterpolator;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView logo;
     boolean isHidden = false;
     private Button searchButton;
+    private static final Pattern mPattern = Pattern.compile("[^A-Za-z]");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
         bar = (EditText)findViewById(R.id.searchBar);
         searchButton = (Button)findViewById(R.id.searchButton);
-        Pattern mPattern = Pattern.compile("[^A-Za-z]");
+
 
         //will get from our database per week
         String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"};
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        //writes the text to searchBar
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,int position, long id)
@@ -73,31 +75,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //searchButton doSearch
         searchButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(bar.getText().toString().length() > 1){
-                    String query = bar.getText().toString();
+                String query = bar.getText().toString();
+                if(bar.getText().toString().length() > 0 && isValid(query)){
                     doSearch(query);
                 }else{
-                    Toast.makeText(MainActivity.this, "Input a valid query.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
+        //search starter for keyboard
         bar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
-                boolean handled = false;
-                if(i == EditorInfo.IME_ACTION_SEARCH && v.getText().length() > 0){
-                   doSearch(bar.getText().toString());
+                String query = bar.getText().toString();
+                if(i == EditorInfo.IME_ACTION_SEARCH && v.getText().length() > 0 && isValid(query)){
+                   doSearch(query);
+                    return true;
                 }
-                return handled;
+                else{
+                    Toast.makeText(MainActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
+                    return false;
+                }
             }
         });
-
-
-
     }
 
     private void fadeOutAndHideImage(final ImageView logo)
@@ -125,6 +130,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d(tag, query);
         queryIntent.putExtra("query", query);
         startActivity(queryIntent);
+    }
+
+    //returns true if its a valid query
+    private boolean isValid(String s){
+        Matcher mMatch = mPattern.matcher(s);
+        return mMatch.matches();
     }
 }
 
