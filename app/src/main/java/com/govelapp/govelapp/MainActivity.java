@@ -11,10 +11,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView logo;
     boolean isHidden = false;
     private Button searchButton;
+    private GridView storesList;
     //our valid characters
     private static final Pattern mPattern = Pattern.compile("[a-zA-Z \t]+");
 
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
         bar = (EditText)findViewById(R.id.searchBar);
         searchButton = (Button)findViewById(R.id.searchButton);
-
+        storesList = (GridView)findViewById(R.id.stores_list);
 
         //will get from our database per week
         String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"};
@@ -70,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,int position, long id)
             {
-                bar.setText(actv.getText().toString());
-                bar.setSelection(actv.getText().toString().length()); //set the cursor position
-            // Toast.makeText(MainActivity.this, query, Toast.LENGTH_LONG).show();
+                String s = actv.getText().toString();
+                bar.setText(s);
+                bar.setSelection(s.length()); //set the cursor position
             }
         });
 

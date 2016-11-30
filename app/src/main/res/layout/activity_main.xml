@@ -20,6 +20,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="91dp" />
 
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/stores_list"
+        android:layout_below="@+id/searchButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <AutoCompleteTextView
         android:id="@+id/searchBar"
         android:layout_width="wrap_content"
@@ -28,12 +36,12 @@
         android:hint="@string/search_bar_tip"
         tools:layout_editor_absoluteY="191dp"
         tools:layout_editor_absoluteX="81dp"
+        android:imeOptions="actionSearch"
         android:layout_below="@+id/logoImg"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:imeOptions="actionSearch">
+        android:layout_toLeftOf="@+id/searchButton"
+        android:layout_toStartOf="@+id/searchButton">
         <requestFocus />
     </AutoCompleteTextView>
 
@@ -42,7 +50,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/searchButton"
-        android:layout_alignBaseline="@+id/searchBar"
         android:layout_alignBottom="@+id/searchBar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

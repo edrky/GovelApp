@@ -1,6 +1,7 @@
 package com.govelapp.govelapp;
 
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,10 +39,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private EditText bar;
     private AutoCompleteTextView actv;
-    private String url = getString(R.string.url); //values'e koy
+    private String url = "govelapp.com/api";     //getResources().getString(R.string.url);
     private List<Shop> shopList;
     private String query;
-    private static final Pattern mPattern = Pattern.compile("[A-Za-z]");
+    //our valid characters
+    private static final Pattern mPattern = Pattern.compile("[a-zA-Z \t]+");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,18 +78,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-       new webGetSetMarkers().execute();
-
-        //sets the autocomplete text to the search bar
+        //sets the autocomplete text to the search bar and searches for the results
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                String s = actv.getText().toString();
-                bar.setText(s);
-                bar.setSelection(s.length()); //set the cursor position
-
+                String mapsQuery = actv.getText().toString();
+                bar.setText(mapsQuery);
+                bar.setSelection(mapsQuery.length()); //set the cursor position
+                if(mapsQuery.length() > 0 && isValid(mapsQuery)){
+                    query = mapsQuery;
+                    new webGetSetMarkers().execute(url, query);
+                }else{
+                    Toast.makeText(MapsActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -96,6 +101,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }else{
             //prompt user for permission
         }
+
+        new webGetSetMarkers().execute(url, query);
+
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.043437, 29.008537), 16.5f));
 
       /*  LatLng cafeNero = new LatLng(41.044400, 29.006949);
@@ -104,6 +113,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(kukaKafe).title("Kuka Kafe & Pub"));
         LatLng sahilRest = new LatLng(41.041835, 29.009481);
         mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));*/
+
     }
 
     //returns true if its a valid query
@@ -112,8 +122,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return mMatch.matches();
     }
 
-
-    private class webGetSetMarkers extends AsyncTask<Void, Void, Void>{
+//url, query, void ---- params[0], params[1], void
+    private class webGetSetMarkers extends AsyncTask<String, String, Void>{
         //loading screen(?)
         @Override
         protected void onPreExecute() {
@@ -121,9 +131,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         //main function to run
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(String... params) {
             RestClient rc = new RestClient();
-            String jsonReply = rc.getStandardQueryJson(url, query);
+            String jsonReply = rc.getStandardQueryJson(params[0], params[1]);
 
             QueryParser qp = new QueryParser();
             shopList = qp.parseShopList(jsonReply);
@@ -138,10 +148,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
-        @Override
+       /* @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-        }
+        }*/
 
         @Override
         protected void onCancelled(Void result) {
