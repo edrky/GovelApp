@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView logo;
     boolean isHidden = false;
     private Button searchButton;
-    private static final Pattern mPattern = Pattern.compile("[^A-Za-z]");
+    //our valid characters
+    private static final Pattern mPattern = Pattern.compile("[a-zA-Z \t]+");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String query = bar.getText().toString();
-                if(bar.getText().toString().length() > 0 && isValid(query)){
+                if(query.length() > 0 && isValid(query)){
                     doSearch(query);
                 }else{
                     Toast.makeText(MainActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
                 String query = bar.getText().toString();
-                if(i == EditorInfo.IME_ACTION_SEARCH && v.getText().length() > 0 && isValid(query)){
+                if(i == EditorInfo.IME_ACTION_SEARCH && query.length() > 0 && isValid(query)){
                    doSearch(query);
                     return true;
                 }
@@ -134,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
 
     //returns true if its a valid query
     private boolean isValid(String s){
-        Matcher mMatch = mPattern.matcher(s);
-        return mMatch.matches();
+            Matcher mMatch = mPattern.matcher(s);
+            return mMatch.matches();
     }
 }
 
