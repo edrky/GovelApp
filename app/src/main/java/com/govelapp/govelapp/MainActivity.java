@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView logo;
     boolean isHidden = false;
     private Button searchButton;
-    private GridView storesList;
+    private GridView storesList; //list of places like supermarket or grocery store
     //our valid characters
     private static final Pattern mPattern = Pattern.compile("[a-zA-Z \t]+");
 
