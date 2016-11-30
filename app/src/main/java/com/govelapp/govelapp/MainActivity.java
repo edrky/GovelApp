@@ -4,20 +4,24 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AccelerateInterpolator;
 
-
+import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText bar;
     private ImageView logo;
     boolean isHidden = false;
-
+    private Button searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +40,12 @@ public class MainActivity extends AppCompatActivity {
         logo = (ImageView)findViewById(R.id.logoImg);
         actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
         bar = (EditText)findViewById(R.id.searchBar);
+        searchButton = (Button)findViewById(R.id.searchButton);
+        Pattern mPattern = Pattern.compile("[^A-Za-z]");
 
         //will get from our database per week
         String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"};
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this,android.R.layout.simple_list_item_1,items);
         actv.setAdapter(adapter);
@@ -60,15 +67,32 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,int position, long id)
             {
-                Intent queryIntent = new Intent(MainActivity.this, MapsActivity.class);
-                String query = actv.getText().toString();
-                Log.d(tag, query);
-                bar.setText(query);
-                bar.setSelection(query.length()); //set the cursor position
-                    queryIntent.putExtra("query", query);
-                    startActivity(queryIntent);
-
+                bar.setText(actv.getText().toString());
+                bar.setSelection(actv.getText().toString().length()); //set the cursor position
             // Toast.makeText(MainActivity.this, query, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        searchButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(bar.getText().toString().length() > 1){
+                    String query = bar.getText().toString();
+                    doSearch(query);
+                }else{
+                    Toast.makeText(MainActivity.this, "Input a valid query.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        bar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
+                boolean handled = false;
+                if(i == EditorInfo.IME_ACTION_SEARCH && v.getText().length() > 0){
+                   doSearch(bar.getText().toString());
+                }
+                return handled;
             }
         });
 
@@ -81,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         Animation fadeOut = new AlphaAnimation(1, 0);
         fadeOut.setInterpolator(new AccelerateInterpolator());
         //fadeOut.setStartOffset(100); // Start fading out after 100 milli seconds
-        fadeOut.setDuration(800);
+        fadeOut.setDuration(300);
 
         fadeOut.setAnimationListener(new AnimationListener()
         {
@@ -94,6 +118,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         logo.startAnimation(fadeOut);
+    }
+
+    private void doSearch(String query){
+        Intent queryIntent = new Intent(MainActivity.this, MapsActivity.class);
+        Log.d(tag, query);
+        queryIntent.putExtra("query", query);
+        startActivity(queryIntent);
     }
 }
 
