@@ -23,6 +23,7 @@ tools:layout="@layout/activity_maps" />
         android:id="@+id/searchBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:imeOptions="actionSearch"
         android:ems="10"
         android:hint="Search and GoWell"
         tools:layout_editor_absoluteY="191dp"
