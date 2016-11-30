@@ -1,6 +1,7 @@
 package com.govelapp.govelapp;
 
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -26,55 +27,41 @@ import com.govelapp.govelapp.shopclasses.Shop;
 
 import org.json.JSONArray;
 
+import java.net.URL;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private EditText bar;
     private AutoCompleteTextView actv;
-    private String url = "govelapp.com/api"; //values'e koy
+    private String url = getString(R.string.url); //values'e koy
     private List<Shop> shopList;
     private String query;
-
-    private void webGetSetMarkers(){
-        //implement this as a thread / asynchronously
-        RestClient rc = new RestClient();
-        String jsonReply = rc.getStandardQueryJson(url, query);
-
-        QueryParser qp = new QueryParser();
-        shopList = qp.parseShopList(jsonReply);
-
-    }
+    private static final Pattern mPattern = Pattern.compile("[A-Za-z]");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         actv = (AutoCompleteTextView)findViewById(R.id.searchBar);
         bar = (EditText) findViewById(R.id.searchBar);
+
+        query = getIntent().getExtras().getString("query");
 
         //create a seperate adapter for maps activity search bar
         String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"}; //this is for testing purposes
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this,android.R.layout.simple_list_item_1,items);
         actv.setAdapter(adapter);
-
-        query = getIntent().getExtras().getString("query");
-
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        webGetSetMarkers();
     }
-
-    //yanlıs olabilir kontrol et
-   /* @Override
-    public boolean onSearchRequested(SearchEvent searchEvent) {
-        query = aramabarı.getStuff.toString
-                webgetrequest
-    }*/
 
     /**
      * Manipulates the map once available.
@@ -89,12 +76,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+       new webGetSetMarkers().execute();
+
+        //sets the autocomplete text to the search bar
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                bar.setText(actv.getText().toString());
-                bar.setSelection(actv.getText().toString().length()); //set the cursor position
+                String s = actv.getText().toString();
+                bar.setText(s);
+                bar.setSelection(s.length()); //set the cursor position
+
             }
         });
 
@@ -106,15 +98,55 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.043437, 29.008537), 16.5f));
 
-        for (Shop sh : shopList){
-            mMap.addMarker(sh.getMarkerOptions());
-        }
-
-        LatLng cafeNero = new LatLng(41.044400, 29.006949);
+      /*  LatLng cafeNero = new LatLng(41.044400, 29.006949);
         mMap.addMarker(new MarkerOptions().position(cafeNero).title("Cafe Nero"));
         LatLng kukaKafe = new LatLng(41.043850, 29.006359);
         mMap.addMarker(new MarkerOptions().position(kukaKafe).title("Kuka Kafe & Pub"));
         LatLng sahilRest = new LatLng(41.041835, 29.009481);
-        mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));
+        mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));*/
+    }
+
+    //returns true if its a valid query
+    private boolean isValid(String s){
+        Matcher mMatch = mPattern.matcher(s);
+        return mMatch.matches();
+    }
+
+
+    private class webGetSetMarkers extends AsyncTask<Void, Void, Void>{
+        //loading screen(?)
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        //main function to run
+        @Override
+        protected Void doInBackground(Void... params) {
+            RestClient rc = new RestClient();
+            String jsonReply = rc.getStandardQueryJson(url, query);
+
+            QueryParser qp = new QueryParser();
+            shopList = qp.parseShopList(jsonReply);
+            return null;
+        }
+        //do after doInBackground is finished
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            for (Shop sh : shopList){
+                mMap.addMarker(sh.getMarkerOptions());
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onCancelled(Void result) {
+            super.onCancelled(result);
+        }
     }
 }
+
