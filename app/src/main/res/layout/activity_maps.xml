@@ -29,6 +29,7 @@ tools:layout="@layout/activity_maps" />
         tools:layout_editor_absoluteY="191dp"
         tools:layout_editor_absoluteX="81dp"
         android:layout_below="@+id/logoImg"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
