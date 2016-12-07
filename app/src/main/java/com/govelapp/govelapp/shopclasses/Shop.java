@@ -16,6 +16,7 @@ public class Shop {
 
     private int id;
     private String name;
+    private String info;
     private category mainCategory;
     private LatLng position;
     private MarkerOptions markerOptions;
@@ -36,6 +37,10 @@ public class Shop {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getInfo() {return info;}
+
+    public void setInfo(String info) {this.info = info;}
 
     public category getMainCategory() {
         return mainCategory;
@@ -64,7 +69,8 @@ public class Shop {
     public void setMarkerOptions() {
         markerOptions = new MarkerOptions()
                 .position(position)
-                .title(name);
+                .title(name)
+                .snippet(info);
     }
 
     public BitmapDescriptor getIcon() {
