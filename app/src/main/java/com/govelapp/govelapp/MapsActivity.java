@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 
 import android.os.AsyncTask;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -31,9 +32,11 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -102,6 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMyLocationEnabled(true);
 
         //everything after this is for prototyping
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -116,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //will uncomment when server is up
        // new webGetSetMarkers().execute(url, query);
         LatLng cafeNero = new LatLng(41.044400, 29.006949);
-        Marker Cafe_nero = mMap.addMarker(new MarkerOptions().position(cafeNero).title("Cafe Nero").snippet("NiCe"));
+        Marker Cafe_nero = mMap.addMarker(new MarkerOptions().position(cafeNero).title("Cafe Nero").snippet("NiCe").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_default)));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cafeNero, 16.5f));
 
