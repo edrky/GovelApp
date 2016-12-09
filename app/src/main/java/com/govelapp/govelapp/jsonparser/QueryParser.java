@@ -73,6 +73,7 @@ public class QueryParser {
                 ));
                 shop.setMarkerOptions();
                 shop.setIcon();
+                shop.setInfo("info");
 
                 shopList.add(shop);
             }
