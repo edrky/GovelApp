@@ -1,9 +1,18 @@
 package com.govelapp.govelapp;
 
+import android.*;
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+
+import android.location.LocationManager;
+import android.location.Location;
+import android.location.LocationListener;
+
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -13,17 +22,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+
 import com.govelapp.govelapp.jsonparser.QueryParser;
 import com.govelapp.govelapp.restclient.RestClient;
 import com.govelapp.govelapp.shopclasses.Shop;
@@ -36,8 +53,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
     private GoogleMap mMap;
+
+    private Location location;
+    private LocationRequest mLocationRequest;
+    private final long MIN_TIME = 500;
+    private final float MIN_DISTANCE = 1000;
+
     private EditText bar;
     private AutoCompleteTextView actv;
     private String url = "govelapp.com/api";     //getResources().getString(R.string.url);
@@ -45,6 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String query;
     //our valid characters
     private static final Pattern mPattern = Pattern.compile("[a-zA-Z \t]+");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        actv = (AutoCompleteTextView)findViewById(R.id.searchBar);
+        actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
         bar = (EditText) findViewById(R.id.searchBar);
 
         query = getIntent().getExtras().getString("query");
@@ -63,7 +86,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //create a seperate adapter for maps activity search bar
         String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"}; //this is for testing purposes
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this,android.R.layout.simple_list_item_1,items);
+                (this, android.R.layout.simple_expandable_list_item_1, items);
         actv.setAdapter(adapter);
     }
 
@@ -79,6 +102,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        //everything after this is for prototyping
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }else{
+            Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(gpsOptionsIntent); //prompt user for permission
+        }
+
+        //UiSettings.setMyLocationButtonEnabled(true);
+
+        //will uncomment when server is up
+       // new webGetSetMarkers().execute(url, query);
+        LatLng cafeNero = new LatLng(41.044400, 29.006949);
+        Marker Cafe_nero = mMap.addMarker(new MarkerOptions().position(cafeNero).title("Cafe Nero").snippet("NiCe"));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cafeNero, 16.5f));
+
+        LatLng kukaKafe = new LatLng(41.043850, 29.006359);
+        mMap.addMarker(new MarkerOptions().position(kukaKafe).title("Kuka Kafe & Pub"));
+        LatLng sahilRest = new LatLng(41.041835, 29.009481);
+        mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));
+        Cafe_nero.showInfoWindow();
+
         //sets the autocomplete text to the search bar and searches for the results
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -95,28 +142,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
-
-        //everything after this is for prototyping
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-        }else{
-            Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(gpsOptionsIntent); //prompt user for permission
-        }
-
-        //will uncomment when server is up
-       // new webGetSetMarkers().execute(url, query);
-
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.043437, 29.008537), 16.5f));
-
-      /*  LatLng cafeNero = new LatLng(41.044400, 29.006949);
-        mMap.addMarker(new MarkerOptions().position(cafeNero).title("Cafe Nero"));
-        LatLng kukaKafe = new LatLng(41.043850, 29.006359);
-        mMap.addMarker(new MarkerOptions().position(kukaKafe).title("Kuka Kafe & Pub"));
-        LatLng sahilRest = new LatLng(41.041835, 29.009481);
-        mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));*/
-
     }
 
     //returns true if its a valid query
@@ -125,7 +150,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return mMatch.matches();
     }
 
-//url, query, void ---- params[0], params[1], void
+     //url, query, void ---- params[0], params[1], void
     private class webGetSetMarkers extends AsyncTask<String, String, Void>{
         //loading screen(?)
         @Override
@@ -158,6 +183,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         protected void onCancelled(Void result) {
+
             super.onCancelled(result);
         }
     }

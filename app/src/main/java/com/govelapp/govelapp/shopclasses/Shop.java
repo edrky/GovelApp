@@ -70,7 +70,8 @@ public class Shop {
         markerOptions = new MarkerOptions()
                 .position(position)
                 .title(name)
-                .snippet(info);
+                .snippet(info)
+                .icon(icon);
     }
 
     public BitmapDescriptor getIcon() {
