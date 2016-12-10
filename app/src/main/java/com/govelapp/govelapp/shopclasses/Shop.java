@@ -82,18 +82,18 @@ public class Shop {
         this.icon = icon;
     }
 
-    public void setIcon(){
+   /* public void setIcon(){
         switch(mainCategory){
-//            case category.CAFE:
-//                icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_cafe);
-//                break;
-//            case category.MARKET:
-//                icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_market);
-//                break;
+            case category.CAFE:
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_cafe);
+               break;
+            case category.MARKET:
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_market);
+                break;
             default:
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_default);
         }
-    }
+    }*/
 
     private category interpretCategory(String categoryString){
         switch(categoryString) {
