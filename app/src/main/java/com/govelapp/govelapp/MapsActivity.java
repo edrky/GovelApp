@@ -62,6 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationRequest mLocationRequest;
     private final long MIN_TIME = 500;
     private final float MIN_DISTANCE = 1000;
+    private int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION;
 
     private EditText bar;
     private AutoCompleteTextView actv;
@@ -107,43 +108,66 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
 
-        //everything after this is for prototyping
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-        }else{
-            Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(gpsOptionsIntent); //prompt user for permission
-        }
-
-        //UiSettings.setMyLocationButtonEnabled(true);
-
-        //will uncomment when server is up
-       // new webGetSetMarkers().execute(url, query);
-        LatLng cafeNero = new LatLng(41.044400, 29.006949);
-        Marker Cafe_nero = mMap.addMarker(new MarkerOptions().position(cafeNero).title("Cafe Nero").snippet("NiCe").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_default)));
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cafeNero, 16.5f));
-
-        LatLng kukaKafe = new LatLng(41.043850, 29.006359);
-        mMap.addMarker(new MarkerOptions().position(kukaKafe).title("Kuka Kafe & Pub"));
-        LatLng sahilRest = new LatLng(41.041835, 29.009481);
-        mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));
-        Cafe_nero.showInfoWindow();
-
-        //sets the autocomplete text to the search bar and searches for the results
-        actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                String mapsQuery = actv.getText().toString();
-                bar.setText(mapsQuery);
-                bar.setSelection(mapsQuery.length()); //set the cursor position
-                if(mapsQuery.length() > 0 && isValid(mapsQuery)){
-                    query = mapsQuery;
-                    new webGetSetMarkers().execute(url, query);
-                }else{
-                    Toast.makeText(MapsActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
+            //everything after this is for prototyping
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mMap.setMyLocationEnabled(true);
+            }else{
+                Toast.makeText(MapsActivity.this, "gps açık değil", Toast.LENGTH_LONG).show();
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    mMap.setMyLocationEnabled(true);
                 }
+            }
+
+
+            //UiSettings.setMyLocationButtonEnabled(true);
+
+            //will uncomment when server is up
+            // new webGetSetMarkers().execute(url, query);
+            LatLng cafeNero = new LatLng(41.044400, 29.006949);
+            Marker Cafe_nero = mMap.addMarker(new MarkerOptions()
+                    .position(cafeNero)
+                    .title("Cafe Nero")
+                    .snippet("Snippets\nare\ngood.")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_default)));
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cafeNero, 16.5f));
+
+            LatLng kukaKafe = new LatLng(41.043850, 29.006359);
+            mMap.addMarker(new MarkerOptions().position(kukaKafe).title("Kuka Kafe & Pub"));
+            LatLng sahilRest = new LatLng(41.041835, 29.009481);
+            mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));
+            Cafe_nero.showInfoWindow();
+
+            //sets the autocomplete text to the search bar and searches for the results
+            actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
+                    String mapsQuery = actv.getText().toString();
+                    bar.setText(mapsQuery);
+                    bar.setSelection(mapsQuery.length()); //set the cursor position
+                    if(mapsQuery.length() > 0 && isValid(mapsQuery)){
+                        query = mapsQuery;
+                        new webGetSetMarkers().execute(url, query);
+                    }else{
+                        Toast.makeText(MapsActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+
+        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+
+            @Override
+            public void onMyLocationChange(Location arg0) {
+                // TODO Auto-generated method stub
+
+                CameraUpdate center= CameraUpdateFactory.newLatLng(new LatLng(arg0.getLatitude(), arg0.getLongitude()));
+                CameraUpdate zoom=CameraUpdateFactory.zoomTo(12);
+
+                mMap.moveCamera(center);
+                mMap.animateCamera(zoom);
             }
         });
     }
