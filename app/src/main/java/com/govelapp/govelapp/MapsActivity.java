@@ -58,12 +58,6 @@ import java.util.regex.Pattern;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
 
-    private Location location;
-    private LocationRequest mLocationRequest;
-    private final long MIN_TIME = 500;
-    private final float MIN_DISTANCE = 1000;
-    private int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION;
-
     private EditText bar;
     private AutoCompleteTextView actv;
     private String url = "govelapp.com/api";     //getResources().getString(R.string.url);
@@ -71,6 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String query;
     //our valid characters
     private static final Pattern mPattern = Pattern.compile("[a-zA-Z \t]+");
+    final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 0;
 
 
     @Override
@@ -106,17 +101,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true);
 
-            //everything after this is for prototyping
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            Toast.makeText(MapsActivity.this, "GPS not enabled", Toast.LENGTH_LONG).show();
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+            }
+        }
+
+
+
+        //everything after this is for prototyping
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mMap.setMyLocationEnabled(true);
             }else{
-                Toast.makeText(MapsActivity.this, "gps açık değil", Toast.LENGTH_LONG).show();
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    mMap.setMyLocationEnabled(true);
-                }
+                Toast.makeText(MapsActivity.this, "GPS not enabled", Toast.LENGTH_LONG).show();
             }
 
 
@@ -156,21 +173,57 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
 
-
-        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-
-            @Override
-            public void onMyLocationChange(Location arg0) {
-                // TODO Auto-generated method stub
-
-                CameraUpdate center= CameraUpdateFactory.newLatLng(new LatLng(arg0.getLatitude(), arg0.getLongitude()));
-                CameraUpdate zoom=CameraUpdateFactory.zoomTo(12);
-
-                mMap.moveCamera(center);
-                mMap.animateCamera(zoom);
-            }
-        });
     }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                onMyLocationChange(location);
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+
+        public void onMyLocationChange(Location arg0) {
+            CameraUpdate center= CameraUpdateFactory.newLatLng(new LatLng(arg0.getLatitude(), arg0.getLongitude()));
+            CameraUpdate zoom=CameraUpdateFactory.zoomTo(12);
+
+            mMap.moveCamera(center);
+            mMap.animateCamera(zoom);
+        }
 
     //returns true if its a valid query
     private boolean isValid(String s){

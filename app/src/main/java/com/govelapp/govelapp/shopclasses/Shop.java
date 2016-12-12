@@ -82,7 +82,7 @@ public class Shop {
         this.icon = icon;
     }
 
-   /* public void setIcon(){
+    /*public void setIcon(){
         switch(mainCategory){
             case category.CAFE:
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_cafe);

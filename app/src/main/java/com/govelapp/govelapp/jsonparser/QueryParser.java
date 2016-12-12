@@ -72,7 +72,7 @@ public class QueryParser {
                         place.getDouble("longitude")
                 ));
                 shop.setMarkerOptions();
-                shop.setIcon();
+                //shop.setIcon();
                 shop.setInfo("info");
 
                 shopList.add(shop);
