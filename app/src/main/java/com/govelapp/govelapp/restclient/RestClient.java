@@ -29,8 +29,7 @@ public class RestClient {
 
     //set after cleansing raw query
     public void setQueryString() {
-        this.queryString = query.replaceAll("([^a-zA-Z0-9 ])", "")
-                .replaceAll(" ", "+");
+        this.queryString = query.replaceAll("([^a-zA-Z0-9])", "").replaceAll(" ", "+");
     }
 
     public String getRawUrl() {
