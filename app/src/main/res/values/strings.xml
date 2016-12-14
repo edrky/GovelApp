@@ -2,5 +2,7 @@
     <string name="app_name">GovelApp</string>
     <string name="title_activity_maps">Map</string>
     <string name="url">govelapp.com/api</string>
-    <string name="search_bar_tip">Search and Gowell</string>
+    <string name="search_bar_hint">Search and Gowell</string>
+    <string name="govelapp_logo_description">GovelApp Logo</string>
+    <string name="search_button_name">Search</string>
 </resources>

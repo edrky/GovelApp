@@ -30,52 +30,46 @@ import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity {
     public static final String tag = "MainActivity";
 
-    private AutoCompleteTextView actv;
-    private EditText bar;
+    private AutoCompleteTextView searchBar;
     private ImageView logo;
     boolean isHidden = false;
     private Button searchButton;
-    private GridView storesList; //list of places like supermarket or grocery store
-    //our valid characters
     private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t]+");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        logo = (ImageView)findViewById(R.id.logoImg);
-        actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
-        bar = (EditText)findViewById(R.id.searchBar);
-        searchButton = (Button)findViewById(R.id.searchButton);
-        storesList = (GridView)findViewById(R.id.stores_list);
+        logo = (ImageView) findViewById(R.id.logoView);
+        searchBar = (AutoCompleteTextView) findViewById(R.id.searchBar);
+        searchButton = (Button) findViewById(R.id.searchButton);
 
         //will get from our database per week
         String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this,android.R.layout.simple_list_item_1,items);
-        actv.setAdapter(adapter);
+                (this, android.R.layout.simple_list_item_1, items);
+        searchBar.setAdapter(adapter);
 
-        actv =(AutoCompleteTextView)findViewById(R.id.searchBar);
+        searchBar = (AutoCompleteTextView) findViewById(R.id.searchBar);
 
-        bar.setOnClickListener(new OnClickListener() {
+        searchBar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                    if(!isHidden) {
-                        fadeOutAndHideImage(logo);   //make search bar fade out
-                        isHidden = true;
-                    }
+                if (!isHidden) {
+                    fadeOutAndHideImage(logo);   //make search searchBar fade out
+                    isHidden = true;
+                }
             }
         });
 
         //writes the text to searchBar
-        actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        searchBar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,int position, long id)
-            {
-                String s = actv.getText().toString();
-                bar.setText(s);
-                bar.setSelection(s.length()); //set the cursor position
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String s = searchBar.getText().toString();
+                searchBar.setText(s);
+                searchBar.setSelection(s.length()); //set the cursor position
             }
         });
 
@@ -83,25 +77,24 @@ public class MainActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                String query = bar.getText().toString();
-                if(query.length() > 0 && isValid(query)){
+                String query = searchBar.getText().toString();
+                if (query.length() > 0 && isValid(query)) {
                     doSearch(query);
-                }else{
+                } else {
                     Toast.makeText(MainActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
         //search starter for keyboard
-        bar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
-                String query = bar.getText().toString();
-                if(i == EditorInfo.IME_ACTION_SEARCH && query.length() > 0 && isValid(query)){
-                   doSearch(query);
+                String query = searchBar.getText().toString();
+                if (i == EditorInfo.IME_ACTION_SEARCH && query.length() > 0 && isValid(query)) {
+                    doSearch(query);
                     return true;
-                }
-                else{
+                } else {
                     Toast.makeText(MainActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
                     return false;
                 }
@@ -109,27 +102,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void fadeOutAndHideImage(final ImageView logo)
-    {
+    private void fadeOutAndHideImage(final ImageView logo) {
         Animation fadeOut = new AlphaAnimation(1, 0);
         fadeOut.setInterpolator(new AccelerateInterpolator());
         //fadeOut.setStartOffset(100); // Start fading out after 100 milli seconds
         fadeOut.setDuration(300);
 
-        fadeOut.setAnimationListener(new AnimationListener()
-        {
-            public void onAnimationEnd(Animation animation)
-            {
+        fadeOut.setAnimationListener(new AnimationListener() {
+            public void onAnimationEnd(Animation animation) {
                 logo.setVisibility(View.GONE);
             }
-            public void onAnimationRepeat(Animation animation) {}
-            public void onAnimationStart(Animation animation) {}
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            public void onAnimationStart(Animation animation) {
+            }
         });
 
         logo.startAnimation(fadeOut);
     }
 
-    private void doSearch(String query){
+    private void doSearch(String query) {
         Intent queryIntent = new Intent(MainActivity.this, MapsActivity.class);
         Log.d(tag, query);
         queryIntent.putExtra("query", query);
@@ -137,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //returns true if its a valid query
-    private boolean isValid(String s){
-            Matcher mMatch = queryPattern.matcher(s);
-            return mMatch.matches();
+    private boolean isValid(String s) {
+        Matcher mMatch = queryPattern.matcher(s);
+        return mMatch.matches();
     }
 }
