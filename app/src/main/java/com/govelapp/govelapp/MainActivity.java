@@ -142,13 +142,3 @@ public class MainActivity extends AppCompatActivity {
             return mMatch.matches();
     }
 }
-
-//Make REST request hereWatashiWaKai
-//1. Create url from queryParts and actual url
-//2. http connection to the url, and get answer
-//3. get map objects
-//4. create single group of map markers to pass as intentl
-//for now, let's set some example value on button press
-//queryString = "kahve pasta";
-//text.setText(queryString);
-//remove upper lines, just for testing
