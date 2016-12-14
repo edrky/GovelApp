@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private Button searchButton;
     private GridView storesList; //list of places like supermarket or grocery store
     //our valid characters
-    private static final Pattern mPattern = Pattern.compile("[a-zA-Z \t]+");
+    private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t]+");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
     //returns true if its a valid query
     private boolean isValid(String s){
-            Matcher mMatch = mPattern.matcher(s);
+            Matcher mMatch = queryPattern.matcher(s);
             return mMatch.matches();
     }
 }
