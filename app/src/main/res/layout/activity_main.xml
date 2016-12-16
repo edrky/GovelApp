@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/black_marker">
+    android:background="@color/mainTheme">
 
 
     <ImageView
@@ -28,16 +28,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:foregroundTint="@color/cast_intro_overlay_background_color"
             android:hint="@string/search_bar_hint"
+            android:textColorHint="@color/cast_expanded_controller_background_color"
             android:imeOptions="actionSearch"
             android:inputType="text" />
 
         <Button
             android:id="@+id/searchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/search_button_name" />
+            android:layout_width="131dp"
+            android:layout_height="36dp"
+            android:text="@string/search_button_name"
+            android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color"/>
 
     </LinearLayout>
 </LinearLayout>
