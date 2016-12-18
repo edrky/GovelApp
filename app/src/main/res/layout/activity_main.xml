@@ -26,6 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/round_search_bar"
             android:hint="@string/search_bar_hint"
             android:textColorHint="@color/cast_expanded_controller_background_color"
             android:imeOptions="actionSearch"
@@ -33,10 +34,11 @@
 
         <Button
             android:id="@+id/searchButton"
-            android:layout_width="86dp"
-            android:layout_height="86dp"
+            android:layout_height="73dp"
             android:text="@string/search_button_name"
-            android:background="@drawable/round_button"/>
+            android:background="@drawable/round_button"
+            android:layout_weight="0.03"
+            android:layout_width="73dp" />
 
     </LinearLayout>
 </LinearLayout>
