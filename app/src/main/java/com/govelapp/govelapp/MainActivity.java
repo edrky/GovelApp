@@ -3,6 +3,7 @@ package com.govelapp.govelapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     boolean isHidden = false;
     private Button searchButton;
     private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t]+");
+    private Toolbar mToolBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
         logo = (ImageView) findViewById(R.id.logoView);
         searchBar = (AutoCompleteTextView) findViewById(R.id.searchBar);
         searchButton = (Button) findViewById(R.id.searchButton);
+
+        mToolBar = (Toolbar) findViewById(R.id.main_toolbar);
+        mToolBar.setLogo(R.drawable.icon);
 
         //will get from our database per week
         String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"};

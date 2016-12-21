@@ -7,10 +7,15 @@ import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,6 +46,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Shop> shopList;
     private String query;
 
+    private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private ArrayAdapter<String> mAdapter;
+    private Toolbar mToolBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //basic setup
@@ -51,11 +62,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
+         mToolBar = (Toolbar) findViewById(R.id.my_toolbar);
+        mToolBar.setLogo(R.drawable.icon);
+        //create left side bar
+
 
         //create a seperate adapter for maps activity search actv
+        actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
         String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "tooth brush", "tooth pick", "kahve"}; //this is for testing purposes
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
+        ArrayAdapter<String> adapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_expandable_list_item_1, items);
         actv.setAdapter(adapter);
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,7 +96,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //MAP SETUP
         mMap = googleMap;
         UiSettings mUI = mMap.getUiSettings();
-        mUI.setZoomControlsEnabled(true);
+        mUI.setZoomControlsEnabled(false);
+        mUI.setMapToolbarEnabled(true);
+        mUI.setCompassEnabled(false);
+
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -92,8 +110,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         showcaseBesiktas();
-
-
     }
 
     private void showcaseBesiktas() {
