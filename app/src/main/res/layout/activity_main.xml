@@ -16,29 +16,44 @@
         android:cropToPadding="false"
         app:srcCompat="@drawable/govel" />
 
-    <LinearLayout
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+    <AutoCompleteTextView
+        android:id="@+id/searchBar"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_bar_hint"
+        android:textColorHint="@color/cast_expanded_controller_background_color"
+        android:background="@drawable/round_search_bar"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:layout_weight="1.05" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_height="30dp"
+        android:background="@drawable/round_button"
+        android:text="@string/search_button_name"
+        android:layout_width="109dp"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        />
+</LinearLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/main_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-        <AutoCompleteTextView
-            android:id="@+id/searchBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/round_search_bar"
-            android:hint="@string/search_bar_hint"
-            android:textColorHint="@color/cast_expanded_controller_background_color"
-            android:imeOptions="actionSearch"
-            android:inputType="text" />
-
-        <Button
-            android:id="@+id/searchButton"
-            android:layout_height="73dp"
-            android:text="@string/search_button_name"
-            android:background="@drawable/round_button"
-            android:layout_weight="0.03"
-            android:layout_width="73dp" />
-
-    </LinearLayout>
 </LinearLayout>

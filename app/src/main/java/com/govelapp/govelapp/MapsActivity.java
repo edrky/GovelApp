@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -44,7 +47,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String query;
 
     private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
     private ArrayAdapter<String> mAdapter;
+    private Toolbar mToolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +62,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+         mToolBar = (Toolbar) findViewById(R.id.my_toolbar);
+        mToolBar.setLogo(R.drawable.icon);
         //create left side bar
 
-        mDrawerList = (ListView) findViewById(R.id.drawer_layout);
-
-        String[] osArray = { "Android", "iOS", "Windows", "OS X", "Linux" };
-        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
-        mDrawerList.setAdapter(mAdapter);
 
         //create a seperate adapter for maps activity search actv
         actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
         String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "tooth brush", "tooth pick", "kahve"}; //this is for testing purposes
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
+        ArrayAdapter<String> adapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_expandable_list_item_1, items);
         actv.setAdapter(adapter);
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -95,6 +98,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         UiSettings mUI = mMap.getUiSettings();
         mUI.setZoomControlsEnabled(false);
         mUI.setMapToolbarEnabled(true);
+        mUI.setCompassEnabled(false);
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
