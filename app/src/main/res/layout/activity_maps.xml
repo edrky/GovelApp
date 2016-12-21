@@ -29,7 +29,6 @@
         android:inputType="text"
         android:layout_weight="1.05" />
 
-
 <!--MAP-->
     <fragment
         xmlns:android="http://schemas.android.com/apk/res/android"
