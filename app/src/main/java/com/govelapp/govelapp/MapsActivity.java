@@ -1,23 +1,37 @@
 package com.govelapp.govelapp;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Service;
+import android.content.Context;
 import android.content.pm.PackageManager;
 
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
+
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,6 +42,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.MapFragment;
 
+import com.google.android.gms.plus.model.people.Person;
 import com.govelapp.govelapp.jsonparser.QueryParser;
 import com.govelapp.govelapp.restclient.RestClient;
 import com.govelapp.govelapp.shopclasses.Shop;
@@ -36,8 +51,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-    //our valid characters
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+    //our valid characters OnMapReadyCallback
     private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t]+");
     final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 0;
     private GoogleMap mMap;
@@ -49,9 +64,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private ArrayAdapter<String> mAdapter;
     private Toolbar mToolBar;
 
+    private Marker mMarker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //basic setup
@@ -62,9 +77,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-         mToolBar = (Toolbar) findViewById(R.id.my_toolbar);
+        mToolBar = (Toolbar) findViewById(R.id.my_toolbar);
         mToolBar.setLogo(R.drawable.icon);
+
         //create left side bar
+        String[] examples = {"a","b","c"};
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer, examples));
+        mDrawerLayout.openDrawer(Gravity.LEFT, true);
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 
         //create a seperate adapter for maps activity search actv
@@ -91,6 +115,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         query = getIntent().getExtras().getString("query");
     }
 
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            fonksiyon(position);
+        }
+    }
+
+    private void fonksiyon(int position) {
+    }
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //MAP SETUP
@@ -99,6 +134,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mUI.setZoomControlsEnabled(false);
         mUI.setMapToolbarEnabled(true);
         mUI.setCompassEnabled(false);
+        mMap.setOnMarkerClickListener(this);
+
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -112,6 +149,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         showcaseBesiktas();
     }
 
+    @Override
+    public boolean onMarkerClick(final Marker marker){
+
+        return false;
+    }
+
     private void showcaseBesiktas() {
         LatLng cafeNero = new LatLng(41.044400, 29.006949);
         Marker Cafe_nero = mMap.addMarker(new MarkerOptions()
@@ -122,12 +165,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cafeNero, 16.5f));
 
-        LatLng kukaKafe = new LatLng(41.043850, 29.006359);
+       /* LatLng kukaKafe = new LatLng(41.043850, 29.006359);
         mMap.addMarker(new MarkerOptions().position(kukaKafe).title("Kuka Kafe & Pub"));
         LatLng sahilRest = new LatLng(41.041835, 29.009481);
         mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));
-        Cafe_nero.showInfoWindow();
+        Cafe_nero.showInfoWindow();*/
     }
+
+
 
     /*
     @Override
