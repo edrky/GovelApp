@@ -1,45 +1,78 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_maps"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <ImageView
+        android:id="@+id/loading_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="32dp"
+        android:adjustViewBounds="false"
+        android:contentDescription="@string/govelapp_logo_description"
+        android:cropToPadding="false"
+        app:srcCompat="@drawable/ic_flare_black_hd" />
+
+    <RelativeLayout
+        android:id="@+id/activity_maps"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.govelapp.govelapp.MapsActivity">
 
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-
     <AutoCompleteTextView
         android:id="@+id/searchBar"
-        android:layout_width="0dp"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/my_toolbar"
         android:hint="@string/search_bar_hint"
         android:textColorHint="@color/cast_expanded_controller_background_color"
         android:background="@drawable/round_search_bar"
         android:imeOptions="actionSearch"
         android:inputType="text"
-        android:layout_weight="1.05" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-<!--MAP-->
-    <fragment
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_below="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.govelapp.govelapp.MapsActivity"
-        tools:layout="@layout/activity_maps" />
+        <!--MAP-->
+        <fragment
+             xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:map="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/map"
+             android:name="com.google.android.gms.maps.MapFragment"
+             android:layout_below="@+id/searchBar"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.govelapp.govelapp.MapsActivity"
+             tools:layout="@layout/activity_maps" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/right_drawer_layout"
+            android:weightSum="10"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/background"
+                android:layout_weight="3"
+                android:visibility="visible">
+
+                <ListView
+                    android:id="@+id/linear_drawer_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
 
 </RelativeLayout>
+</FrameLayout>
