@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         logo = (ImageView) findViewById(R.id.logoView);
         searchBar = (AutoCompleteTextView) findViewById(R.id.searchBar);
@@ -110,26 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    }
-
-    private void fadeOutAndHideDrawer(final View drawer) {
-        Animation fadeOut = new AlphaAnimation(1, 0);
-        fadeOut.setInterpolator(new AccelerateInterpolator());
-        fadeOut.setDuration(700);
-
-        fadeOut.setAnimationListener(new AnimationListener() {
-            public void onAnimationEnd(Animation animation) {
-                drawer.setVisibility(View.INVISIBLE);
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            public void onAnimationStart(Animation animation) {
-            }
-        });
-
-        drawer.startAnimation(fadeOut);
     }
 
     private void fadeOutAndHideImage(final ImageView logo) {

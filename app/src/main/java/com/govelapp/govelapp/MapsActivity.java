@@ -1,45 +1,23 @@
 package com.govelapp.govelapp;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Service;
-import android.content.Context;
 import android.content.pm.PackageManager;
 
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 
 
-import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.identity.intents.AddressConstants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,7 +28,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.MapFragment;
 
-import com.google.android.gms.plus.model.people.Person;
 import com.govelapp.govelapp.jsonparser.QueryParser;
 import com.govelapp.govelapp.restclient.RestClient;
 import com.govelapp.govelapp.shopclasses.Shop;
@@ -83,14 +60,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        while(!mapFragment.isInLayout()){
-            ImageView loadImg = (ImageView) findViewById(R.id.loading_indicator);
-            RotateAnimation r = new RotateAnimation(0.0f, 2f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            r.setDuration((long) 50000);
-            r.setRepeatCount(0);
-            loadImg.startAnimation(r);
-        }
-
         //create right side bar
         mDrawerLayout = (LinearLayout) findViewById(R.id.right_drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.linear_drawer_list);
@@ -101,6 +70,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ArrayAdapter<String> adapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_expandable_list_item_1, items);
         actv.setAdapter(adapter);
+        actv.setText(getIntent().getExtras().getString("query"));
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -189,8 +159,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
-
     //returns true if its a valid query
     private boolean queryValidityTest(String s) {
         Matcher mMatch = queryPattern.matcher(s);
@@ -238,54 +206,3 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 }
 
-
-    /*
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-                onMyLocationChange(location);
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
-
-
-    public void onMyLocationChange(Location arg0) {
-        CameraUpdate center= CameraUpdateFactory.newLatLng(new LatLng(arg0.getLatitude(), arg0.getLongitude()));
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(12);
-
-        mMap.moveCamera(center);
-        mMap.animateCamera(zoom);
-    }
-    */
