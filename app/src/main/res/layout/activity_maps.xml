@@ -16,7 +16,7 @@
 
     <AutoCompleteTextView
         android:id="@+id/searchBar"
-        android:layout_width="230dp"
+        android:layout_width="259dp"
         android:layout_height="wrap_content"
         android:hint="@string/search_bar_hint"
         android:textColorHint="@color/cast_expanded_controller_background_color"
@@ -35,7 +35,7 @@
             android:gravity="bottom"
             android:weightSum="10"
             android:id="@+id/right_drawer_layout"
-            android:background="@color/background"
+            android:background="@drawable/round_search_bar"
             android:visibility="visible"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
@@ -44,8 +44,7 @@
             <ListView
                 android:id="@+id/linear_drawer_list"
                 android:layout_width="match_parent"
-                android:background="@drawable/round_search_bar"
-                android:layout_height="190dp" />
+                android:layout_height="205dp" />
 
         </LinearLayout>
 
