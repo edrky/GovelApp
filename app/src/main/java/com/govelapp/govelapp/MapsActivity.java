@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -146,7 +147,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Marker Cafe_nero = mMap.addMarker(new MarkerOptions()
                 .position(cafeNero)
                 .title("Cafe Nero")
-                .snippet("Snippets\nare\ngood.")
+                .snippet("Snippets are good.")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_flare_black_48dp)));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cafeNero, 16.5f));
@@ -156,6 +157,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng sahilRest = new LatLng(41.041835, 29.009481);
         mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));
         Cafe_nero.showInfoWindow();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if(mDrawerLayout.isShown()){
+                mDrawerLayout.setVisibility(View.INVISIBLE);
+            }else{
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 
