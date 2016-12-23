@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,6 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/background">
+
         <ImageView
             android:id="@+id/logoView"
             android:layout_width="match_parent"
@@ -21,36 +23,43 @@
             android:contentDescription="@string/govelapp_logo_description"
             android:cropToPadding="false"
             app:srcCompat="@drawable/govel" />
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="1">
-            <AutoCompleteTextView
-                android:id="@+id/searchBar"
-                android:layout_width="230dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/search_bar_hint"
-                android:textColorHint="@color/cast_expanded_controller_background_color"
-                android:background="@drawable/round_search_bar"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:layout_weight="1.05" />
+            android:weightSum="10"
+            android:layout_gravity="right">
 
             <Button
                 android:id="@+id/searchButton"
-                android:layout_height="30dp"
+                android:layout_height="33dp"
                 android:background="@drawable/round_button"
                 android:text="@string/search_button_name"
-                android:layout_width="109dp"
+                android:layout_width="115dp"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:shadowColor="#A8A8A8"
                 android:shadowDx="2"
                 android:shadowDy="2"
                 android:shadowRadius="5"
-                />
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
-        </LinearLayout>
+            <AutoCompleteTextView
+                android:id="@+id/searchBar"
+                android:layout_width="259dp"
+                android:layout_height="39dp"
+                android:hint="@string/search_bar_hint"
+                android:textColorHint="@color/cast_expanded_controller_background_color"
+                android:background="@drawable/round_search_bar"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/searchButton"
+                android:layout_toStartOf="@+id/searchButton" />
+
+        </RelativeLayout>
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/main_toolbar"
