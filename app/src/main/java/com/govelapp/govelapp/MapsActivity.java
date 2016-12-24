@@ -1,7 +1,6 @@
 package com.govelapp.govelapp;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 
 import android.os.AsyncTask;
@@ -12,19 +11,16 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.google.android.gms.identity.intents.AddressConstants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,7 +35,6 @@ import com.govelapp.govelapp.jsonparser.QueryParser;
 import com.govelapp.govelapp.restclient.RestClient;
 import com.govelapp.govelapp.shopclasses.Shop;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,6 +51,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private RelativeLayout mDrawerLayout;
     private ImageView drawerFoto;
+    private ScrollView mScrollView;
+    private Marker selectedMarker;
 
     private static TextView nameText,adressText,telText,webText,hoursText;
 
@@ -77,6 +74,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         webText = (TextView) findViewById(R.id.text4);
         hoursText = (TextView) findViewById(R.id.text2);
         drawerFoto = (ImageView) findViewById(R.id.imageView);
+        mScrollView = (ScrollView) findViewById(R.id.scrollView);
 
         //create a seperate adapter for maps activity search actv
         actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
@@ -130,17 +128,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         showcaseBesiktas();
-
-        drawerFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-             //fotoyu büyült
-            }
-        });
     }
 
     @Override
     public boolean onMarkerClick(final Marker marker){
+        selectedMarker = marker;
+        showDrawer(marker);
+        return false;
+    }
+
+    private void showDrawer(final Marker marker){
         nameText.setText(marker.getTitle());
         adressText.setText("Serencebey Yokuşu Sk. NO:11A Beşiktaş");
         telText.setText("0212 327 0328");
@@ -153,16 +150,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 "\t\t\tCumartesi:\t06.00-24.00\n" +
                 "\t\t\tPazar:\t06.00-24.00");
 
-       if(!webText.getText().toString().isEmpty()){
-           webText.setClickable(true);
-           webText.setMovementMethod(LinkMovementMethod.getInstance());
-       }
+        if(!webText.getText().toString().isEmpty()){
+            webText.setClickable(true);
+            webText.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+
+        drawerFoto.getLayoutParams().height = 500;
+        drawerFoto.getLayoutParams().width = 500;
+        drawerFoto.setX(10);
 
         mDrawerLayout.setVisibility(View.VISIBLE);
+        mScrollView.setVisibility(View.VISIBLE);
         mDrawerLayout.bringToFront();
-        Log.d("Drawer", "is visible");
 
-        return false;
+        drawerFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mScrollView.setVisibility(View.INVISIBLE);
+                drawerFoto.requestLayout();
+                drawerFoto.setX(100);
+                drawerFoto.getLayoutParams().height = 1000;
+                drawerFoto.getLayoutParams().width = 1000;
+            }
+        });
+
+        Log.d("Marker click", "Drawer is visible");
+
     }
 
     private void showcaseBesiktas() {
@@ -186,7 +199,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if(mDrawerLayout.isShown()){
-                mDrawerLayout.setVisibility(View.INVISIBLE);
+                if(!mScrollView.isShown()){
+                    showDrawer(selectedMarker);
+                }else{
+                    mDrawerLayout.setVisibility(View.INVISIBLE);
+                }
             }else{
                 finish();
             }
