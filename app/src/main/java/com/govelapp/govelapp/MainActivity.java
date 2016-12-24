@@ -8,17 +8,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
@@ -34,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AutoCompleteTextView searchBar;
     private ImageView logo;
-    boolean isHidden = false;
     private Button searchButton;
     private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t]+");
     private Toolbar mToolBar;
@@ -45,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         logo = (ImageView) findViewById(R.id.logoView);
+        logo.setVisibility(View.VISIBLE);
         searchBar = (AutoCompleteTextView) findViewById(R.id.searchBar);
         searchButton = (Button) findViewById(R.id.searchButton);
 
@@ -63,9 +59,8 @@ public class MainActivity extends AppCompatActivity {
         searchBar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isHidden) {
+                if(logo.isShown()){
                     fadeOutAndHideImage(logo);   //make search searchBar fade out
-                    isHidden = true;
                 }
             }
         });
@@ -107,16 +102,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 
     private void fadeOutAndHideImage(final ImageView logo) {
         Animation fadeOut = new AlphaAnimation(1, 0);
         fadeOut.setInterpolator(new AccelerateInterpolator());
         //fadeOut.setStartOffset(100); // Start fading out after 100 milli seconds
-        fadeOut.setDuration(300);
+        fadeOut.setDuration(700);
 
         fadeOut.setAnimationListener(new AnimationListener() {
             public void onAnimationEnd(Animation animation) {
@@ -138,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(tag, query);
         queryIntent.putExtra("query", query);
         startActivity(queryIntent);
+        //will add a transation
     }
 
     //returns true if its a valid query

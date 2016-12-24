@@ -1,6 +1,7 @@
 package com.govelapp.govelapp;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 
 import android.os.AsyncTask;
@@ -10,11 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -48,8 +52,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private List<Shop> shopList;
     private String query;
 
-    private ListView mDrawerList;
-    private LinearLayout mDrawerLayout;
+    private RelativeLayout mDrawerLayout;
+
+    private static TextView nameText,adressText,telText,webText,hoursText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +67,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         //create right side bar
-        mDrawerLayout = (LinearLayout) findViewById(R.id.right_drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.linear_drawer_list);
+        mDrawerLayout = (RelativeLayout) findViewById(R.id.mainLinearLayout);
+        nameText = (TextView) findViewById(R.id.text);
+        adressText = (TextView) findViewById(R.id.text1);
+        telText = (TextView) findViewById(R.id.text2);
+        webText = (TextView) findViewById(R.id.text3);
+        hoursText = (TextView) findViewById(R.id.text4);
 
         //create a seperate adapter for maps activity search actv
         actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
@@ -72,6 +81,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 (this, android.R.layout.simple_expandable_list_item_1, items);
         actv.setAdapter(adapter);
         actv.setText(getIntent().getExtras().getString("query"));
+        actv.clearFocus();
+        actv.setSelection(actv.getText().length());
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -101,6 +112,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mUI.setCompassEnabled(false);
         mMap.setOnMarkerClickListener(this);
 
+        //need to hide the keyboard, couldn't figure out how
+        View view = this.getCurrentFocus();
+        view.clearFocus();
+
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -122,41 +137,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onMarkerClick(final Marker marker){
-        List<String> markerInfos = new ArrayList<>();
-        if(marker.getTitle() != null){
-            markerInfos.add("Title: " + marker.getTitle());
-        }
-        if(marker.getSnippet() != null){
-            markerInfos.add("Info: " + marker.getSnippet());
-        }
-        //String[] examples = new String[]{"a","b","c","d"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, markerInfos);
-
-       mDrawerList.setAdapter(adapter);
+        nameText.setText(marker.getTitle());
+        adressText.setText("Serencebey Yokuşu Sk. NO:11A Beşiktaş");
+        telText.setText("0212 327 0328");
+        webText.setText("-");
+        hoursText.setText("06.00-24.00");
 
         mDrawerLayout.setVisibility(View.VISIBLE);
         mDrawerLayout.bringToFront();
-        Log.d("Layout", "is visible");
+        Log.d("Drawer", "is visible");
 
         return false;
     }
 
     private void showcaseBesiktas() {
-        LatLng cafeNero = new LatLng(41.044400, 29.006949);
-        Marker Cafe_nero = mMap.addMarker(new MarkerOptions()
-                .position(cafeNero)
-                .title("Cafe Nero")
-                .snippet("Snippets are good.")
+        LatLng meydanMarket = new LatLng(41.043694, 29.008614);
+        Marker Market = mMap.addMarker(new MarkerOptions()
+                .position(meydanMarket)
+                .title("Meydan Market")
+                .snippet("")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_flare_black_48dp)));
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cafeNero, 16.5f));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(meydanMarket, 16.5f));
 
         LatLng kukaKafe = new LatLng(41.043850, 29.006359);
         mMap.addMarker(new MarkerOptions().position(kukaKafe).title("Kuka Kafe & Pub"));
         LatLng sahilRest = new LatLng(41.041835, 29.009481);
         mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));
-        Cafe_nero.showInfoWindow();
+        Market.showInfoWindow();
     }
 
     @Override
