@@ -143,20 +143,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void showcaseBesiktas() {
-        LatLng cafeNero = new LatLng(41.044400, 29.006949);
-        Marker Cafe_nero = mMap.addMarker(new MarkerOptions()
-                .position(cafeNero)
-                .title("Cafe Nero")
-                .snippet("Snippets are good.")
+        String showcasePlaces[][] = {
+                {"Derya Promosyon", "41.044232", "29.008083"},
+                {"Nokta Copy Center", "41.044087", "29.008058"},
+                {"Tasarım ve Fotoğraf", "41.044232", "29.008083"},
+                {"Tufan Kırtasiye", "41.043967", "29.008068"},
+                {"Sanat Copy Center", "41.043967", "29.008068"},
+                {"Tiridi Fabrika", "41.043913", "29.008064"}
+        };
+        for(int i=0; i<showcasePlaces.length; i++){
+            LatLng placeLatLng = new LatLng(Double.parseDouble(showcasePlaces[i][1]),
+                    Double.parseDouble(showcasePlaces[i][2]));
+            Marker placeMarker = mMap.addMarker(new MarkerOptions()
+                .position(placeLatLng)
+                .title(showcasePlaces[i][0])
+                .snippet("Copy & Print")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_flare_black_48dp)));
+        }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cafeNero, 16.5f));
-
-        LatLng kukaKafe = new LatLng(41.043850, 29.006359);
-        mMap.addMarker(new MarkerOptions().position(kukaKafe).title("Kuka Kafe & Pub"));
-        LatLng sahilRest = new LatLng(41.041835, 29.009481);
-        mMap.addMarker(new MarkerOptions().position(sahilRest).title("Sahil Rest Cafe"));
-        Cafe_nero.showInfoWindow();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.044066, 29.008070), 16.5f));
     }
 
     @Override

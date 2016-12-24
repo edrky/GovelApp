@@ -8,17 +8,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
@@ -36,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView logo;
     boolean isHidden = false;
     private Button searchButton;
-    private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t]+");
+    private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t/&]+");
     private Toolbar mToolBar;
 
     @Override
@@ -49,10 +45,26 @@ public class MainActivity extends AppCompatActivity {
         searchButton = (Button) findViewById(R.id.searchButton);
 
         mToolBar = (Toolbar) findViewById(R.id.main_toolbar);
-        mToolBar.setLogo(R.drawable.icon);
+        mToolBar.setLogo(R.drawable.ic_launcher);
 
         //will get from our database per week
-        String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "Tooth brush", "Tooth pick"};
+        String[] items = {"Market & Food/Food/Cheese",
+                "Market & Food/Food/Kasar Cheese",
+                "Market & Food/Food/Cream Cheese",
+                "Market & Food/Food/Vodka",
+                "Market & Food/Food/Rum",
+                "Market & Food/Food/Raki",
+                "Grocery/Vegetables/Chilli",
+                "Grocery/Vegetables/Green Pepper",
+                "Grocery/Vegetables/Chili",
+                "Grocery/Fruits/Strawberry",
+                "Grocery/Fruits/Grape",
+                "Grocery/Fruits/Grapefruit",
+                "Copy & Print/Print/Letterhead",
+                "Copy & Print/Print/Invitation Card Printing",
+                "Copy & Print/Print/Pillow Printing",
+                "Copy & Print/Print/Scanning",
+                "Copy & Print/Print/Photocopy"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this, android.R.layout.simple_list_item_1, items);
