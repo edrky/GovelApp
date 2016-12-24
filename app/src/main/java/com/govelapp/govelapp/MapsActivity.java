@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -53,6 +55,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String query;
 
     private RelativeLayout mDrawerLayout;
+    private ImageView drawerFoto;
 
     private static TextView nameText,adressText,telText,webText,hoursText;
 
@@ -70,9 +73,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mDrawerLayout = (RelativeLayout) findViewById(R.id.mainLinearLayout);
         nameText = (TextView) findViewById(R.id.text);
         adressText = (TextView) findViewById(R.id.text1);
-        telText = (TextView) findViewById(R.id.text2);
-        webText = (TextView) findViewById(R.id.text3);
-        hoursText = (TextView) findViewById(R.id.text4);
+        telText = (TextView) findViewById(R.id.text3);
+        webText = (TextView) findViewById(R.id.text4);
+        hoursText = (TextView) findViewById(R.id.text2);
+        drawerFoto = (ImageView) findViewById(R.id.imageView);
 
         //create a seperate adapter for maps activity search actv
         actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
@@ -127,10 +131,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         showcaseBesiktas();
 
-        mDrawerLayout.setOnClickListener(new View.OnClickListener() {
+        drawerFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDrawerLayout.setVisibility(View.INVISIBLE);
+             //fotoyu büyült
             }
         });
     }
@@ -140,8 +144,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         nameText.setText(marker.getTitle());
         adressText.setText("Serencebey Yokuşu Sk. NO:11A Beşiktaş");
         telText.setText("0212 327 0328");
-        webText.setText("-");
-        hoursText.setText("06.00-24.00");
+        webText.setText("google.com");
+        hoursText.setText("Pazartesi:\t06.00-24.00\n" +
+                "\t\t\tSalı:\t\t06.00-24.00\t\n" +
+                "\t\t\tÇarşamba:\t06.00-24.00\n" +
+                "\t\t\tPerşembe:\t06.00-24.00\n" +
+                "\t\t\tCuma:\t\t06.00-24.00\n" +
+                "\t\t\tCumartesi:\t06.00-24.00\n" +
+                "\t\t\tPazar:\t06.00-24.00");
+
+       if(!webText.getText().toString().isEmpty()){
+           webText.setClickable(true);
+           webText.setMovementMethod(LinkMovementMethod.getInstance());
+       }
 
         mDrawerLayout.setVisibility(View.VISIBLE);
         mDrawerLayout.bringToFront();
