@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AutoCompleteTextView searchBar;
     private ImageView logo;
+    boolean isHidden = false;
     private Button searchButton;
     private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t/&]+");
     private Toolbar mToolBar;
@@ -40,12 +41,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         logo = (ImageView) findViewById(R.id.logoView);
-        logo.setVisibility(View.VISIBLE);
         searchBar = (AutoCompleteTextView) findViewById(R.id.searchBar);
         searchButton = (Button) findViewById(R.id.searchButton);
 
         mToolBar = (Toolbar) findViewById(R.id.main_toolbar);
-        mToolBar.setLogo(R.drawable.ic_launcher);
+        mToolBar.setLogo(R.drawable.icon);
 
         //will get from our database per week
         String[] items = {"Market & Food/Food/Cheese",
@@ -71,12 +71,14 @@ public class MainActivity extends AppCompatActivity {
         searchBar.setAdapter(adapter);
 
         searchBar = (AutoCompleteTextView) findViewById(R.id.searchBar);
+        searchBar.clearComposingText();
 
         searchBar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(logo.isShown()){
+                if (!isHidden) {
                     fadeOutAndHideImage(logo);   //make search searchBar fade out
+                    isHidden = true;
                 }
             }
         });
@@ -118,13 +120,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
     }
 
     private void fadeOutAndHideImage(final ImageView logo) {
         Animation fadeOut = new AlphaAnimation(1, 0);
         fadeOut.setInterpolator(new AccelerateInterpolator());
         //fadeOut.setStartOffset(100); // Start fading out after 100 milli seconds
-        fadeOut.setDuration(700);
+        fadeOut.setDuration(300);
 
         fadeOut.setAnimationListener(new AnimationListener() {
             public void onAnimationEnd(Animation animation) {
@@ -146,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(tag, query);
         queryIntent.putExtra("query", query);
         startActivity(queryIntent);
-        //will add a transation
     }
 
     //returns true if its a valid query
