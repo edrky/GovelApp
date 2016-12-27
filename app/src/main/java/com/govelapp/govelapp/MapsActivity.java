@@ -146,24 +146,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void showDrawer(final Marker marker){
         //experimental
-        String hours = "6:00-24:00";
+        String hours = "\t6:00-24:00\n";
 
         nameText.setText(marker.getTitle());
         adressText.setText("Serencebey Yokuşu Sk. NO:11A Beşiktaş");
         telText.setText("0212 327 0328");
         webText.setText("google.com");
+        hoursText.setText(R.string.working_hours);
         hoursText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hoursText.setText("Pazartesi:\n" +
-                        "Salı:\n" +
-                        "Çarşamba:\n" +
-                        "Perşembe:\n" +
-                        "Cuma:\n" +
-                        "Cumartesi:\n" +
-                        "Pazar:");
+                hoursText.setText("\tPazartesi:\n" + "\tSalı:\n" + "\tÇarşamba:\n" + "\tPerşembe:\n" +
+                        "\tCuma:\n" +
+                        "\tCumartesi:\n" +
+                        "\tPazar:");
             }
         });
+
+       // ((TextView)findViewById(R.id.hours)).setText(hours + hours + hours);
 
         if(!webText.getText().toString().isEmpty()){
             webText.setClickable(true);
