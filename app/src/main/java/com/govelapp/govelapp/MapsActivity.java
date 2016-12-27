@@ -11,6 +11,8 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -133,22 +135,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(final Marker marker){
         selectedMarker = marker;
+        if(!mDrawerLayout.isShown()){
+            Animation animation =  AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.drawer_open);
+            mDrawerLayout.startAnimation(animation);
+        }
         showDrawer(marker);
         return false;
     }
 
     private void showDrawer(final Marker marker){
+        //experimental
+        String hours = "6:00-24:00";
+
         nameText.setText(marker.getTitle());
         adressText.setText("Serencebey Yokuşu Sk. NO:11A Beşiktaş");
         telText.setText("0212 327 0328");
         webText.setText("google.com");
-        hoursText.setText("Pazartesi:\t06.00-24.00\n" +
-                "\t\t\tSalı:\t\t06.00-24.00\t\n" +
-                "\t\t\tÇarşamba:\t06.00-24.00\n" +
-                "\t\t\tPerşembe:\t06.00-24.00\n" +
-                "\t\t\tCuma:\t\t06.00-24.00\n" +
-                "\t\t\tCumartesi:\t06.00-24.00\n" +
-                "\t\t\tPazar:\t06.00-24.00");
+        hoursText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hoursText.setText("Pazartesi:\n" +
+                        "Salı:\n" +
+                        "Çarşamba:\n" +
+                        "Perşembe:\n" +
+                        "Cuma:\n" +
+                        "Cumartesi:\n" +
+                        "Pazar:");
+            }
+        });
 
         if(!webText.getText().toString().isEmpty()){
             webText.setClickable(true);
@@ -208,6 +223,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     showDrawer(selectedMarker);
                 }else{
                     mDrawerLayout.setVisibility(View.INVISIBLE);
+                    Log.d("Drawer Layout", "is hidden");
+                    hoursText.clearComposingText();
+                    Animation animation =  AnimationUtils.loadAnimation(getApplicationContext(),
+                            R.anim.drawer_close);
+                    mDrawerLayout.startAnimation(animation);
                 }
             }else{
                 finish();
