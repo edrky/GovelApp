@@ -1,6 +1,7 @@
 package com.govelapp.govelapp;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import android.os.AsyncTask;
@@ -110,24 +111,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         //MAP SETUP
         mMap = googleMap;
+        mMap.setIndoorEnabled(false);
         UiSettings mUI = mMap.getUiSettings();
         mUI.setZoomControlsEnabled(false);
+        mUI.setMyLocationButtonEnabled(false);
         mUI.setMapToolbarEnabled(true);
         mUI.setCompassEnabled(false);
         mMap.setOnMarkerClickListener(this);
 
         //need to hide the keyboard, couldn't figure out how
-        View view = this.getCurrentFocus();
-        view.clearFocus();
+       /* View view = this.getCurrentFocus();
+        view.clearFocus(); */
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(MapsActivity.this, "Location enabled", Toast.LENGTH_LONG).show();
             mMap.setMyLocationEnabled(true);
         } else {
             Toast.makeText(MapsActivity.this, "Location permission is disabled.", Toast.LENGTH_SHORT).show();
+
             //request permission
         }
+
+        actv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mDrawerLayout.isShown()){
+                    mDrawerLayout.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
         showcaseBesiktas();
     }
@@ -163,16 +177,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-       // ((TextView)findViewById(R.id.hours)).setText(hours + hours + hours);
-
         if(!webText.getText().toString().isEmpty()){
             webText.setClickable(true);
             webText.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
-        drawerFoto.getLayoutParams().height = 500;
-        drawerFoto.getLayoutParams().width = 500;
         drawerFoto.setX(10);
+        drawerFoto.getLayoutParams().height = 400;
+        drawerFoto.getLayoutParams().width = 400;
 
         mDrawerLayout.setVisibility(View.VISIBLE);
         mScrollView.setVisibility(View.VISIBLE);
@@ -230,7 +242,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mDrawerLayout.startAnimation(animation);
                 }
             }else{
-                finish();
+                Intent queryIntent = new Intent(MapsActivity.this, MainActivity.class);
+                startActivity(queryIntent);
             }
             return true;
         }

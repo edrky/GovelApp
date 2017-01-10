@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#44a8b5</color>
-    <color name="colorPrimaryDark">#37848e</color>
+    <color name="colorPrimary">#26A69A</color>
+    <color name="colorPrimaryDark">#00897B</color>
     <color name="colorAccent">#ff4081</color>
     <color name="background">#e8ebef</color>
     <color name="searchBarColor">#f4f9f9</color>

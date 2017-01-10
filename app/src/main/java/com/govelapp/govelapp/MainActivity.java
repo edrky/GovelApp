@@ -30,22 +30,18 @@ public class MainActivity extends AppCompatActivity {
 
     private AutoCompleteTextView searchBar;
     private ImageView logo;
-    boolean isHidden = false;
     private Button searchButton;
     private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t/&]+");
-    private Toolbar mToolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        logo = (ImageView) findViewById(R.id.logoView);
+        logo = (ImageView) findViewById(R.id.ic_launcher);
         searchBar = (AutoCompleteTextView) findViewById(R.id.searchBar);
-        searchButton = (Button) findViewById(R.id.searchButton);
 
-        mToolBar = (Toolbar) findViewById(R.id.main_toolbar);
-        mToolBar.setLogo(R.drawable.icon);
+        logo.setVisibility(View.VISIBLE);
 
         //will get from our database per week
         String[] items = {"Market & Food/Food/Cheese",
@@ -76,9 +72,8 @@ public class MainActivity extends AppCompatActivity {
         searchBar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isHidden) {
+                if(logo.isShown()){
                     fadeOutAndHideImage(logo);   //make search searchBar fade out
-                    isHidden = true;
                 }
             }
         });
@@ -90,19 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 String s = searchBar.getText().toString();
                 searchBar.setText(s);
                 searchBar.setSelection(s.length()); //set the cursor position
-            }
-        });
-
-        //searchButton doSearch
-        searchButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String query = searchBar.getText().toString();
-                if (query.length() > 0 && isValid(query)) {
-                    doSearch(query);
-                } else {
-                    Toast.makeText(MainActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
-                }
+                doSearch(s);
             }
         });
 
@@ -120,9 +103,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if(!logo.isShown()){
+                logo.setVisibility(View.VISIBLE);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void fadeOutAndHideImage(final ImageView logo) {
