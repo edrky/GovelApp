@@ -8,10 +8,6 @@ import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 
-/**
- * Created by ken on 10.01.2017.
- */
-
 public class LocationManagerCheck {
 
     LocationManager locationManager;
@@ -56,10 +52,10 @@ public class LocationManagerCheck {
         AlertDialog.Builder builder = new AlertDialog.Builder(activityObj);
 
         builder.setMessage(
-                "You need to activate location service to use this feature. Please turn on network or GPS mode in location settings")
-                .setTitle("LostyFound")
+                "You need to activate location service to see your location. Please turn on network or GPS mode in location settings.")
+                .setTitle("GPS is Off")
                 .setCancelable(false)
-                .setPositiveButton("Settings",
+                .setPositiveButton("Open Settings",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Intent intent = new Intent(

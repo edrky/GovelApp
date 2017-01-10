@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -35,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.MapFragment;
 
 import com.govelapp.govelapp.jsonparser.QueryParser;
+import com.govelapp.govelapp.locationmenager.LocationManagerCheck;
 import com.govelapp.govelapp.restclient.RestClient;
 import com.govelapp.govelapp.shopclasses.Shop;
 
@@ -45,7 +48,6 @@ import java.util.regex.Pattern;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     //our valid characters OnMapReadyCallback
     private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t]+");
-    final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 0;
     private GoogleMap mMap;
     private AutoCompleteTextView actv;
     private String url = "govelapp.com/api";     //getResources().getString(R.string.url);
@@ -56,6 +58,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageView drawerFoto;
     private ScrollView mScrollView;
     private Marker selectedMarker;
+    private LocationManager locationManager;
 
     private static TextView nameText,adressText,telText,webText,hoursText;
 
@@ -123,6 +126,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
        /* View view = this.getCurrentFocus();
         view.clearFocus(); */
 
+        LocationManagerCheck locationManagerCheck = new LocationManagerCheck(this);
+        Location location = null;
+
+        if(locationManagerCheck.isLocationServiceAvailable()){
+            if (locationManagerCheck.getProviderType() == 1){
+                //    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            }
+            else if (locationManagerCheck.getProviderType() == 2){
+                //  location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
+        }else{
+            locationManagerCheck.createLocationServiceError(MapsActivity.this);
+        }
+
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -130,7 +147,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.setMyLocationEnabled(true);
         } else {
             Toast.makeText(MapsActivity.this, "Location permission is disabled.", Toast.LENGTH_SHORT).show();
-
             //request permission
         }
 
@@ -149,6 +165,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(final Marker marker){
         selectedMarker = marker;
+        if(actv.isShown()){
+            Animation animation1 =
+                    AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_up_search_bar);
+            actv.startAnimation(animation1);
+            actv.setVisibility(View.INVISIBLE);
+            UiSettings mUI = mMap.getUiSettings();
+            mUI.setMyLocationButtonEnabled(true);
+        }
         if(!mDrawerLayout.isShown()){
             Animation animation =  AnimationUtils.loadAnimation(getApplicationContext(),
                     R.anim.drawer_open);
@@ -240,6 +264,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Animation animation =  AnimationUtils.loadAnimation(getApplicationContext(),
                             R.anim.drawer_close);
                     mDrawerLayout.startAnimation(animation);
+
+                    Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_down_search_bar);
+                    actv.startAnimation(animation1);
+                    actv.setVisibility(View.VISIBLE);
+
+                    UiSettings mUI = mMap.getUiSettings();
+                    mUI.setMyLocationButtonEnabled(false);
                 }
             }else{
                 Intent queryIntent = new Intent(MapsActivity.this, MainActivity.class);
