@@ -1,47 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="10"
-        android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-        android:paddingTop="80dp">
+    android:orientation="vertical"
+    android:paddingTop="80dp"
+    android:weightSum="10">
 
-        <ImageView
-            android:id="@+id/ic_launcher"
-            android:layout_gravity="top"
-            android:adjustViewBounds="false"
-            android:contentDescription="@string/govelapp_logo_description"
-            android:cropToPadding="false"
-            android:elevation="2dp"
-            app:srcCompat="@drawable/ic_launcher"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="47dp"
-            android:layout_width="match_parent"
-            android:layout_height="150dp" />
+    <ImageView
+        android:id="@+id/ic_launcher"
+        android:layout_width="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_height="150dp"
+        android:layout_gravity="top"
+        android:layout_marginTop="47dp"
+        android:adjustViewBounds="false"
+        android:contentDescription="@string/govelapp_logo_description"
+        android:cropToPadding="false"
+        android:elevation="2dp"
+        app:srcCompat="@drawable/ic_launcher" />
 
     <AutoCompleteTextView
-    android:id="@+id/searchBar"
-    android:hint="@string/search_bar_hint"
-    android:textColorHint="@color/cast_expanded_controller_background_color"
-    android:imeOptions="actionSearch"
-    android:background="@drawable/round_search_bar"
-    android:inputType="text"
-    android:layout_height="37dp"
-    android:layout_below="@+id/ic_launcher"
-    android:layout_marginTop="24dp"
+        android:id="@+id/searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:background="@drawable/round_search_bar"
+        android:hint="@string/search_bar_hint"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:nextFocusUp="@id/searchBar"
+        android:nextFocusLeft="@id/searchBar"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
-    android:layout_alignParentRight="true"
-    android:layout_alignParentEnd="true"
-    android:layout_width="match_parent"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp" />
+        android:textColorHint="@color/cast_expanded_controller_background_color" />
 
 </LinearLayout>
 

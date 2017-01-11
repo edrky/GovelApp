@@ -7,7 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -26,11 +28,10 @@ import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity {
-    public static final String tag = "MainActivity";
+    public static final String TAG = "MainActivity";
 
     private AutoCompleteTextView searchBar;
     private ImageView logo;
-    private Button searchButton;
     private static final Pattern queryPattern = Pattern.compile("[a-zA-Z \t/&]+");
 
     @Override
@@ -40,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         logo = (ImageView) findViewById(R.id.ic_launcher);
         searchBar = (AutoCompleteTextView) findViewById(R.id.searchBar);
-
-        logo.setVisibility(View.VISIBLE);
 
         //will get from our database per week
         String[] items = {"Market & Food/Food/Cheese",
@@ -67,17 +66,27 @@ public class MainActivity extends AppCompatActivity {
         searchBar.setAdapter(adapter);
 
         searchBar = (AutoCompleteTextView) findViewById(R.id.searchBar);
-        searchBar.clearComposingText();
 
-        searchBar.setOnClickListener(new OnClickListener() {
+        searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View view) {
-                if(logo.isShown()){
-                    fadeOutAndHideImage(logo);   //make search searchBar fade out
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    AlphaAnimation fadeOut = new AlphaAnimation(1.0f, 0.0f);
+                    fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+                    fadeOut.setDuration(500);
+                    fadeOut.setAnimationListener(new AnimationListener()
+                    {
+                        public void onAnimationEnd(Animation animation)
+                        {
+                            logo.setVisibility(View.GONE);
+                        }
+                        public void onAnimationRepeat(Animation animation) {}
+                        public void onAnimationStart(Animation animation) {}
+                    });
+                    logo.startAnimation(fadeOut);
                 }
             }
         });
-
         //writes the text to searchBar
         searchBar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -103,43 +112,25 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.d(TAG, "onKeyDown: " + keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if(!logo.isShown()){
+            Log.d(TAG, "key is back");
+                Log.d(TAG, "key is back and logo not shown");
                 logo.setVisibility(View.VISIBLE);
-            }
+                searchBar.clearFocus();
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    private void fadeOutAndHideImage(final ImageView logo) {
-        Animation fadeOut = new AlphaAnimation(1, 0);
-        fadeOut.setInterpolator(new AccelerateInterpolator());
-        //fadeOut.setStartOffset(100); // Start fading out after 100 milli seconds
-        fadeOut.setDuration(300);
-
-        fadeOut.setAnimationListener(new AnimationListener() {
-            public void onAnimationEnd(Animation animation) {
-                logo.setVisibility(View.GONE);
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            public void onAnimationStart(Animation animation) {
-            }
-        });
-
-        logo.startAnimation(fadeOut);
-    }
-
     private void doSearch(String query) {
         Intent queryIntent = new Intent(MainActivity.this, MapsActivity.class);
-        Log.d(tag, query);
+        Log.d(TAG, query);
         queryIntent.putExtra("query", query);
         startActivity(queryIntent);
     }
