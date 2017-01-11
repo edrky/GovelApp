@@ -55,13 +55,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private List<Shop> shopList;
     private String query;
 
-    private RelativeLayout mDrawerLayout;
-    private ImageView drawerFoto;
-    private ScrollView mScrollView;
     private Marker selectedMarker;
-    private LocationManager locationManager;
-
-    private static TextView nameText,adressText,telText,webText,hoursText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +66,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        //create right side bar
-        mDrawerLayout = (RelativeLayout) findViewById(R.id.mainLinearLayout);
-        nameText = (TextView) findViewById(R.id.text);
-        adressText = (TextView) findViewById(R.id.text1);
-        telText = (TextView) findViewById(R.id.text3);
-        webText = (TextView) findViewById(R.id.text4);
-        hoursText = (TextView) findViewById(R.id.text2);
-        drawerFoto = (ImageView) findViewById(R.id.imageView);
-        mScrollView = (ScrollView) findViewById(R.id.scrollView);
 
         //create a seperate adapter for maps activity search actv
         actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
@@ -154,15 +138,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //request permission
         }
 
-        actv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mDrawerLayout.isShown()){
-                    mDrawerLayout.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-
         showcaseBesiktas();
     }
 
@@ -177,16 +152,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             UiSettings mUI = mMap.getUiSettings();
             mUI.setMyLocationButtonEnabled(true);
         }
-        if(!mDrawerLayout.isShown()){
-            Animation animation =  AnimationUtils.loadAnimation(getApplicationContext(),
-                    R.anim.drawer_open);
-            mDrawerLayout.startAnimation(animation);
-        }
-        showDrawer(marker);
+     //   showDrawer(marker);
         return false;
     }
 
-    private void showDrawer(final Marker marker){
+   /* private void showDrawer(final Marker marker){
         //experimental
         String hours = "\t6:00-24:00\n";
 
@@ -231,7 +201,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Log.d("Marker click", "Drawer is visible");
 
-    }
+    }*/
 
     private void showcaseBesiktas() {
         String showcasePlaces[][] = {
@@ -253,36 +223,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.044066, 29.008070), 16.5f));
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if(mDrawerLayout.isShown()){
-                if(!mScrollView.isShown()){
-                    showDrawer(selectedMarker);
-                }else{
-                    mDrawerLayout.setVisibility(View.INVISIBLE);
-                    Log.d("Drawer Layout", "is hidden");
-                    hoursText.clearComposingText();
-                    Animation animation =  AnimationUtils.loadAnimation(getApplicationContext(),
-                            R.anim.drawer_close);
-                    mDrawerLayout.startAnimation(animation);
-
-                    Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_down_search_bar);
-                    actv.startAnimation(animation1);
-                    actv.setVisibility(View.VISIBLE);
-
-                    UiSettings mUI = mMap.getUiSettings();
-                    mUI.setMyLocationButtonEnabled(false);
-                }
-            }else{
-                Intent queryIntent = new Intent(MapsActivity.this, MainActivity.class);
-                startActivity(queryIntent);
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
 

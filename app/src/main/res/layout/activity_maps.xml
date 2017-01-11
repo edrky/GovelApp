@@ -1,167 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:foregroundGravity="bottom"
     android:orientation="vertical"
-    android:background="@color/background">
+    android:fitsSystemWindows="true">
 
-    <!--MAP-->
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.MapFragment"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.govelapp.govelapp.MapsActivity"
-        tools:layout="@layout/activity_maps" /> -->
+        android:fitsSystemWindows="true"
+        android:id="@+id/appBar">
 
 
-    <RelativeLayout
-        android:id="@+id/activity_maps"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        tools:context="com.govelapp.govelapp.MapsActivity">
-
-        <AutoCompleteTextView
-            android:id="@+id/searchBar"
-            android:hint="@string/search_bar_hint"
-            android:textColorHint="@color/cast_expanded_controller_background_color"
-            android:background="@drawable/round_search_bar"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:elevation="5dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="24dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginLeft="24dp"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginRight="24dp"
-            android:layout_height="40dp"
-            android:layout_width="400dp" />
-
-        <RelativeLayout
-            android:id="@+id/mainLinearLayout"
-            android:layout_height="230dp"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/drawer_background"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:visibility="invisible"
-            android:elevation="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_width="match_parent">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="130dp"
-                android:layout_height="120dp"
-                android:src="@drawable/img"
-                android:elevation="5dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                 />
-
-            <ScrollView
+        <!--MAP-->
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/foto_background"
-                android:id="@+id/scrollView"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_width="250dp">
+                tools:context="com.govelapp.govelapp.MapsActivity"
+                tools:layout="@layout/activity_maps" /> -->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/text"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/borders_for_text_view"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@android:color/black" />
+        <com.sothree.slidinguppanel.SlidingUpPanelLayout
+            xmlns:sothree="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/sliding_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            sothree:umanoPanelHeight="68dp"
+            sothree:umanoShadowHeight="4dp">
 
-                    <TextView
-                        android:background="@drawable/borders_for_text_view"
-                        android:id="@+id/text1"
-                        android:textStyle="italic"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="10dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="text1"
+                android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/text2"
-                        android:text="@string/working_hours"
-                        android:background="@drawable/borders_for_text_view"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@android:color/black" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|top"
+                android:text="text2"
+                android:textSize="16sp" />
+        </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
-                    <TextView
-                        android:id="@+id/text3"
-                        android:background="@drawable/borders_for_text_view"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@android:color/black" />
+    </android.support.design.widget.AppBarLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:background="@drawable/borders_for_text_view"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
-                        android:layout_height="0dp"
-                        android:id="@+id/text4"
-                        android:autoLink="web"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@android:color/holo_blue_bright"
-                        android:layout_weight="2.35" />
 
-                </LinearLayout>
-            </ScrollView>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-60dp"
+        android:layout_marginRight="16dp"
+        android:src="@android:drawable/ic_dialog_email"
+        app:layout_anchor="@id/appBar"
+        app:layout_anchorGravity="bottom|right|end"  />
 
-        </RelativeLayout>
-
-    </RelativeLayout>
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
