@@ -1,6 +1,8 @@
 package com.govelapp.govelapp;
 
 import android.Manifest;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
@@ -9,10 +11,15 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -41,6 +48,7 @@ import com.govelapp.govelapp.jsonparser.QueryParser;
 import com.govelapp.govelapp.locationmenager.LocationManagerCheck;
 import com.govelapp.govelapp.restclient.RestClient;
 import com.govelapp.govelapp.shopclasses.Shop;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -55,7 +63,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private List<Shop> shopList;
     private String query;
 
-    private Marker selectedMarker;
+    private SlidingUpPanelLayout slidingUpPanelLayout;
+    private Toolbar mToolbar;
+
+     private Marker selectedMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +78,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        //slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mToolbar);
+
         //create a seperate adapter for maps activity search actv
-        actv = (AutoCompleteTextView) findViewById(R.id.searchBar);
+        /*actv = (AutoCompleteTextView) findViewById(R.id.search);
         String[] items = {"tea", "apple", "phone case", "tooth paste", "tennis racket", "tooth brush", "tooth pick", "kahve"}; //this is for testing purposes
         ArrayAdapter<String> adapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_expandable_list_item_1, items);
@@ -89,7 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Toast.makeText(MapsActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
                 }
             }
-        });
+        });*/
 
         query = getIntent().getExtras().getString("query");
     }
@@ -103,7 +118,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         UiSettings mUI = mMap.getUiSettings();
         mUI.setZoomControlsEnabled(false);
         mUI.setMyLocationButtonEnabled(false);
-        mUI.setMapToolbarEnabled(true);
+        mUI.setMapToolbarEnabled(false);
         mUI.setCompassEnabled(false);
         mMap.setOnMarkerClickListener(this);
 
@@ -141,17 +156,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         showcaseBesiktas();
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        return true;
+    }
+
     @Override
     public boolean onMarkerClick(final Marker marker){
         selectedMarker = marker;
-        if(actv.isShown()){
-            Animation animation1 =
-                    AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_up_search_bar);
-            actv.startAnimation(animation1);
-            actv.setVisibility(View.INVISIBLE);
-            UiSettings mUI = mMap.getUiSettings();
-            mUI.setMyLocationButtonEnabled(true);
-        }
+
      //   showDrawer(marker);
         return false;
     }

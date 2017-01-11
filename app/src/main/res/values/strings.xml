@@ -3,7 +3,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="url">govelapp.com/api</string>
     <string name="working_hours">Click to see working hours</string>
-    <string name="search_bar_hint">Search here</string>
+    <string name="search_bar_hint"> </string>
     <string name="govelapp_logo_description">Storch Logo</string>
-    <string name="search_button_name">Search</string>
 </resources>
