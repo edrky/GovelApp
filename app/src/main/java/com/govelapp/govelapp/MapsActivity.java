@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -63,7 +64,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private List<Shop> shopList;
     private String query;
 
-    private SlidingUpPanelLayout slidingUpPanelLayout;
+    private SlidingUpPanelLayout slidingLayout;
     private Toolbar mToolbar;
 
      private Marker selectedMarker;
@@ -81,6 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mToolbar);
+        slidingLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 
         //create a seperate adapter for maps activity search actv
         /*actv = (AutoCompleteTextView) findViewById(R.id.search);
@@ -171,8 +173,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(final Marker marker){
         selectedMarker = marker;
+        slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        ((TextView) findViewById(R.id.shopNameText)).setText(marker.getTitle());
 
-     //   showDrawer(marker);
+        //   showDrawer(marker);
         return false;
     }
 
