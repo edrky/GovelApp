@@ -14,16 +14,17 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_below="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.govelapp.govelapp.MapsActivity"
         tools:layout="@layout/activity_maps" /> -->
 
+
     <RelativeLayout
         android:id="@+id/activity_maps"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         tools:context="com.govelapp.govelapp.MapsActivity">
 
         <AutoCompleteTextView
@@ -58,10 +59,11 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:visibility="invisible"
+            android:elevation="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_width="384dp">
+            android:layout_width="match_parent">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -93,6 +95,8 @@
                         android:id="@+id/text"
                         android:textSize="20sp"
                         android:textStyle="bold"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/borders_for_text_view"
@@ -105,16 +109,21 @@
                         android:background="@drawable/borders_for_text_view"
                         android:id="@+id/text1"
                         android:textStyle="italic"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        tools:layout_editor_absoluteY="0dp"
-                        tools:layout_editor_absoluteX="0dp" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp" />
 
                     <TextView
                         android:id="@+id/text2"
                         android:text="@string/working_hours"
                         android:background="@drawable/borders_for_text_view"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -125,6 +134,8 @@
                     <TextView
                         android:id="@+id/text3"
                         android:background="@drawable/borders_for_text_view"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -135,6 +146,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:background="@drawable/borders_for_text_view"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
                         android:layout_height="0dp"
                         android:id="@+id/text4"
                         android:autoLink="web"

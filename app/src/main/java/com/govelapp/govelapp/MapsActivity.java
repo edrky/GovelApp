@@ -32,6 +32,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.MapFragment;
@@ -121,6 +122,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mUI.setMapToolbarEnabled(true);
         mUI.setCompassEnabled(false);
         mMap.setOnMarkerClickListener(this);
+
+        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.custom_map);
+        mMap.setMapStyle(style);
 
         //need to hide the keyboard, couldn't figure out how
        /* View view = this.getCurrentFocus();
