@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SlidingPaneLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -80,8 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         //slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(mToolbar);
+
         slidingLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 
         //create a seperate adapter for maps activity search actv
@@ -127,6 +128,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.custom_map);
         mMap.setMapStyle(style);
 
+        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mToolbar);
+
+        mToolbar.setTitle(query);
+        ActionBar mActionBar = getSupportActionBar();
+
         //need to hide the keyboard, couldn't figure out how
        /* View view = this.getCurrentFocus();
         view.clearFocus(); */
@@ -159,6 +166,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    //this is for options menu on toolbar
+  /*  @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+            case R.id.action_favorite:
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }*/
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -180,52 +209,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return false;
     }
 
-   /* private void showDrawer(final Marker marker){
-        //experimental
-        String hours = "\t6:00-24:00\n";
-
-        nameText.setText(marker.getTitle());
-        adressText.setText("Serencebey Yokuşu Sk. NO:11A Beşiktaş");
-        telText.setText("0212 327 0328");
-        webText.setText("google.com");
-        hoursText.setText(R.string.working_hours);
-        hoursText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hoursText.setText("\tPazartesi:\n" + "\tSalı:\n" + "\tÇarşamba:\n" + "\tPerşembe:\n" +
-                        "\tCuma:\n" +
-                        "\tCumartesi:\n" +
-                        "\tPazar:");
-            }
-        });
-
-        if(!webText.getText().toString().isEmpty()){
-            webText.setClickable(true);
-            webText.setMovementMethod(LinkMovementMethod.getInstance());
-        }
-
-        drawerFoto.setX(10);
-        drawerFoto.getLayoutParams().height = 400;
-        drawerFoto.getLayoutParams().width = 400;
-
-        mDrawerLayout.setVisibility(View.VISIBLE);
-        mScrollView.setVisibility(View.VISIBLE);
-        mDrawerLayout.bringToFront();
-
-        drawerFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mScrollView.setVisibility(View.INVISIBLE);
-                drawerFoto.requestLayout();
-                drawerFoto.setX(100);
-                drawerFoto.getLayoutParams().height = 1000;
-                drawerFoto.getLayoutParams().width = 1000;
-            }
-        });
-
-        Log.d("Marker click", "Drawer is visible");
-
-    }*/
 
     private void showcaseBesiktas() {
         String showcasePlaces[][] = {

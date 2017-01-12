@@ -3,23 +3,18 @@ package com.govelapp.govelapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AccelerateInterpolator;
 
@@ -107,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     doSearch(query);
                     return true;
                 } else {
-                    Toast.makeText(MainActivity.this, "Invalid query.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Invalid search parameters.", Toast.LENGTH_LONG).show();
                     return false;
                 }
             }

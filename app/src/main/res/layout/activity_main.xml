@@ -14,20 +14,21 @@
         android:layout_width="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:layout_height="150dp"
         android:layout_gravity="top"
-        android:layout_marginTop="47dp"
+        android:layout_marginTop="10dp"
         android:adjustViewBounds="false"
         android:contentDescription="@string/govelapp_logo_description"
         android:cropToPadding="false"
-        android:elevation="2dp"
-        app:srcCompat="@drawable/ic_launcher" />
+        android:elevation="3dp"
+        app:srcCompat="@drawable/ic_splash"
+        android:layout_height="170dp" />
 
     <AutoCompleteTextView
         android:id="@+id/searchBar"
         android:layout_width="match_parent"
-        android:layout_height="37dp"
+        android:layout_height="40dp"
         android:layout_marginLeft="32dp"
+        android:elevation="4dp"
         android:layout_marginRight="32dp"
         android:background="@drawable/round_search_bar"
         android:hint="@string/search_bar_hint"
@@ -35,9 +36,10 @@
         android:inputType="text"
         android:nextFocusUp="@id/searchBar"
         android:nextFocusLeft="@id/searchBar"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp"
-        android:textColorHint="@color/cast_expanded_controller_background_color" />
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColorHint="@color/cast_expanded_controller_background_color"
+        android:layout_marginTop="32dp" />
 
 </LinearLayout>
 

@@ -85,13 +85,14 @@ sothree:umanoShadowHeight="4dp">
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:visibility="gone"
+        android:background="@color/background"
         android:layout_height="match_parent"
         android:gravity="top">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@drawable/round_search_bar"
+            android:elevation="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -102,7 +103,7 @@ sothree:umanoShadowHeight="4dp">
                 android:textColor="@color/colorPrimary"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:textSize="30sp" />
+                android:textSize="35sp" />
 
         </LinearLayout>
 
